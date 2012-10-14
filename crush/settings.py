@@ -9,16 +9,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'eliasb+crush',
-        'USER': 'eliasb',
-        'PASSWORD': 'bip79han',
-        'HOST': 'sql.mit.edu',
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    }
-}
+from local_settings import DATABASES
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
