@@ -114,6 +114,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'django.contrib.admin',
     'django.contrib.admindocs',
+    'ctest',
     'crush_connector',
 )
 
