@@ -8,6 +8,7 @@ class Person(models.Model):
     def __unicode__(self):
         return self.name
 
+
 class Crush(models.Model):
     crusher = models.ForeignKey(Person, related_name='crush_crushers')
     crushee = models.ForeignKey(Person, related_name='crush_crushees')
