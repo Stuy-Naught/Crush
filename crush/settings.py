@@ -93,11 +93,13 @@ ROOT_URLCONF = 'crush.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'crush.wsgi.application'
 
-TEMPLATE_DIRS = (
+#TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-)
+#)
+
+from local_settings import TEMPLATE_DIRS
 
 INSTALLED_APPS = (
     'django.contrib.auth',

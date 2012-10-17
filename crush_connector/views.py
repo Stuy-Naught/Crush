@@ -1,6 +1,9 @@
 from models import *
 from django.http import HttpResponse
 from django.core.mail import send_mail
+from django.template import Context, loader
+from crush_connector.models import Person, Crush
+from django.http import HttpResponse
 
 def isMatch(Person1, Person2):
     crushes = Crush.objects.all()
@@ -27,3 +30,8 @@ def sendEmail(Person1, Person2):
     FROM = "crush@mit.edu"
     send_mail(SUBJECT, MESSAGE, FROM, EMAILS, fail_silently=False)
     
+def register(request):
+    t = loader.get_template('crush_connector/index.html')
+    c = Context({})
+    return HttpResponse(t.render(c))
+
