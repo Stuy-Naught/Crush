@@ -40,6 +40,15 @@ def register(request):
                 name = form.cleaned_data['name'],
                 email = form.cleaned_data['email']
                 )
+            for i in range(Crush.num_allowed_crushes):
+                crush_email = form.cleaned_data['Crush_email_%d' % (i+1)]
+                crush_person, created = Person.objects.get_or_create(
+                    email = crush_email
+                )
+                crush_person.name = '__no_name__ %s' % crush_email
+                crush_person.save()
+                crush = Crush(crusher=person, crushee=crush_person)
+                crush.save()
             person.save()
             return HttpResponseRedirect('/admin')
         return HttpResponseRedirect('/register')
