@@ -37,9 +37,10 @@ def register(request):
         if form.is_valid():
             print('form is valid')
             person, created = Person.objects.get_or_create(
-                name = form.cleaned_data['name'],
                 email = form.cleaned_data['email']
-                )
+            )
+            person.name = form.cleaned_data['name']
+            person.save()
             for i in range(Crush.num_allowed_crushes):
                 crush_email = form.cleaned_data['Crush_email_%d' % (i+1)]
                 crush_person, created = Person.objects.get_or_create(
@@ -49,7 +50,9 @@ def register(request):
                 crush_person.save()
                 crush = Crush(crusher=person, crushee=crush_person)
                 crush.save()
-            person.save()
+
+                if confirmCrushAndEmail(person, crush_person):
+                    print('match! check your email')
             return HttpResponseRedirect('/admin')
         return HttpResponseRedirect('/register')
 
