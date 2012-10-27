@@ -1,7 +1,7 @@
 from models import *
 from django.core.mail import send_mail
 from django.template import Context, RequestContext, loader
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from crush_connector.models import Person, Crush
 from crush_connector.forms import RegisterForm
@@ -35,10 +35,14 @@ def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
+            print('form is valid')
             person, created = Person.objects.get_or_create(
                 name = form.cleaned_data['name'],
                 email = form.cleaned_data['email']
                 )
+            person.save()
+            return HttpResponseRedirect('/admin')
+        return HttpResponseRedirect('/register')
 
     else:
         form = RegisterForm()
