@@ -1,9 +1,10 @@
 from models import *
-from django.http import HttpResponse
 from django.core.mail import send_mail
-from django.template import Context, loader
-from crush_connector.models import Person, Crush
+from django.template import Context, RequestContext, loader
 from django.http import HttpResponse
+from django.shortcuts import render_to_response
+from crush_connector.models import Person, Crush
+from crush_connector.forms import RegisterForm
 
 def isMatch(Person1, Person2):
     crushes = Crush.objects.all()
@@ -31,7 +32,16 @@ def sendEmail(Person1, Person2):
     send_mail(SUBJECT, MESSAGE, FROM, EMAILS, fail_silently=False)
     
 def register(request):
-    t = loader.get_template('crush_connector/index.html')
-    c = Context({})
-    return HttpResponse(t.render(c))
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            person, created = Person.objects.get_or_create(
+                name = form.cleaned_data['name'],
+                email = form.cleaned_data['email']
+                )
+
+    else:
+        form = RegisterForm()
+        variables = RequestContext(request, {'form': form})
+        return render_to_response('crush_connector/index.html', variables)
 
