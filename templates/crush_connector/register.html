@@ -1,0 +1,9 @@
+{% extends "crush_connector/index.django" %}
+
+{% block content %}
+<h1>find a crush</h1>
+<form action="." class="well" method="post" id="vent-form">{% csrf_token %}
+  {{form.as_p}}
+  <input type="submit" class="btn btn-primary" value="Submit crushes" id="crush-submitt"/>
+</form>
+{% endblock %}

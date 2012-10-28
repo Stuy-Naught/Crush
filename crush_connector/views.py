@@ -31,7 +31,7 @@ def sendEmail(Person1, Person2):
     send_mail(SUBJECT, MESSAGE, FROM, EMAILS, fail_silently=False)
     
 def register(request):
-    t = loader.get_template('crush_connector/index.html')
+    t = loader.get_template('crush_connector/register.html')
     c = Context({})
     return HttpResponse(t.render(c))
 
