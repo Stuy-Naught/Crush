@@ -1,9 +1,10 @@
 from models import *
-from django.http import HttpResponse
 from django.core.mail import send_mail
-from django.template import Context, loader
+from django.template import Context, RequestContext, loader
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render_to_response
 from crush_connector.models import Person, Crush
-from django.http import HttpResponse
+from crush_connector.forms import RegisterForm
 
 def isMatch(Person1, Person2):
     crushes = Crush.objects.all()
@@ -31,7 +32,33 @@ def sendEmail(Person1, Person2):
     send_mail(SUBJECT, MESSAGE, FROM, EMAILS, fail_silently=False)
     
 def register(request):
-    t = loader.get_template('crush_connector/register.html')
-    c = Context({})
-    return HttpResponse(t.render(c))
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            print('form is valid')
+            person, created = Person.objects.get_or_create(
+                email = form.cleaned_data['email']
+            )
+            person.name = form.cleaned_data['name']
+            person.save()
+            for i in range(Crush.num_allowed_crushes):
+                crush_email = form.cleaned_data['Crush_email_%d' % (i+1)]
+                crush_person, created = Person.objects.get_or_create(
+                    email = crush_email
+                )
+                crush_person.name = '__no_name__ %s' % crush_email
+                crush_person.save()
+                crush = Crush(crusher=person, crushee=crush_person)
+                crush.save()
+
+                if confirmCrushAndEmail(person, crush_person):
+                    print('match! check your email')
+            return HttpResponseRedirect('/admin')
+        return HttpResponseRedirect('/register')
+
+    else:
+        form = RegisterForm()
+        variables = RequestContext(request, {'form': form})
+        return render_to_response('crush_connector/index.html', variables)
+
 
