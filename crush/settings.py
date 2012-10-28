@@ -116,6 +116,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'ctest',
     'crush_connector',
+    'name_lookup',
 )
 
 # A sample logging configuration. The only tangible logging

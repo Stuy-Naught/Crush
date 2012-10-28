@@ -19,5 +19,5 @@ urlpatterns = patterns('',
     url(r'^about/', 'crush_connector.views.about'),
     url(r'^validate/(.+)/(\d{10})/', 'crush_connector.views.validate'),
     url(r'^$', 'crush_connector.views.register'),
-   
+    url(r'^name-lookup/(.*)', 'name_lookup.views.lookup_mit_people'),
 )
