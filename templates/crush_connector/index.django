@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/extra.css" rel="stylesheet">
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
     <meta charset="utf-8">
-    <title>MIT CRUSH</title>
+    <title>MIT Crush</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
     
     <!-- Le styles -->
-    <link href="../assets/css/bootstrap.css" rel="stylesheet">
     <style>
       body {
       padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      height:100%
       }
     </style>
 
@@ -37,12 +40,9 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">Project name</a>
+          <a class="brand" href="/">MIT Crush</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="#about">About</a></li>
-              <li><a href="#contact">Contact</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -50,16 +50,30 @@
     </div>
     <div class="container">
     {% block content %}
-<h1>find a crush</h1>
-<form action="." class="well" method="post" id="vent-form">{% csrf_token %}
-  {{form.as_p}}
-  <input type="submit" class="btn btn-primary" value="Submit crushes" id="crush-submitt"/>
-</form>
-
     {% endblock %}
-    </div> <!-- /container -->
-    <!-- Le javascript
-	 ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+{% block tips %}
+    <div class="row">
+      <div class="span4">
+        <h2>Why only three crushes?</h2>
+        <p>The purpose of MIT Crush is to create an environment where real crushes are confessed. If one had an unlimited number of crushes they could input, then they could simply use MIT crush as a tool to see who had a crush on them.</p>
+      </div>
+      <div class="span4">
+        <h2>Who should I choose?</h2>
+        <p>You should choose three people you have a crush on! The best people to choose are those who you've had a few interactions with. While there is a chance that the girl/guy who you've had your eye on during class but never actually talked to has a crush on you, the chance of them putting you down if you haven't interacted is low.</p>
+      </div>
+        <div class="span4">
+          <h2>But what if I don't get an email? :(</h2>
+          <p>The beauty of this website is it only gives you closure on whether or not someone likes you if it's in your favor. But if you want to increase the chances of that oh-so-desired email, you should link this website around!</p>
+        </div>
+    </div>
+    {% endblock %}
+    </div> 
+    {% block footer %}
+    <footer class="footer">
+      <div class="container">
+	 <p class="pull-right"><a href="#">Back to top</a></p>
+      </div>
+    </footer>
+    {% endblock %}
   </body>
 </html>

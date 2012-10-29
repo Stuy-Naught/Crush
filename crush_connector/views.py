@@ -30,6 +30,14 @@ def sendEmail(Person1, Person2):
     EMAILS = [Person1.email, Person2.email]
     FROM = "crush@mit.edu"
     send_mail(SUBJECT, MESSAGE, FROM, EMAILS, fail_silently=False)
+
+def sendVerificationEmail(Person):
+    SUBJECT = "MIT Crush Verification"
+    LINK = "http://18.181.0.46:4040/register?email=%s&key=%s" %(Person.email, Person.SecretKey)
+    MESSAGE = "You are receiving this email because you made a crush request on MIT Crush Connector." + LINK  + " If this action was not done by you, please disregard this email and do not click the above link"
+    EMAILS = [Person.email]
+    FROM = "crush@mit.edu"
+    send_mail(SUBJECT, MESSAGE, FROM, EMAILS, fail_silently=False)
     
 def register(request):
     if request.method == 'POST':
@@ -59,6 +67,12 @@ def register(request):
     else:
         form = RegisterForm()
         variables = RequestContext(request, {'form': form})
-        return render_to_response('crush_connector/index.html', variables)
+        return render_to_response('crush_connector/connect.html', variables)
 
 
+def about(request):
+    return render_to_response('crush_connector/about.html')
+
+def validate(request, email, secretKey):
+    context = Context({'email': email, 'secretKey': secretKey})
+    return render_to_response('crush_connector/validate.html', context)
