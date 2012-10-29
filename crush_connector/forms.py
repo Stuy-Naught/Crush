@@ -3,9 +3,6 @@ import re
 from crush_connector.models import Crush
 
 class RegisterForm(forms.Form):
-    name = forms.CharField(label=u'Name', error_messages = {'required':''})
-    email = forms.EmailField(label=u'Email', error_messages = {'required':''})
-
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
 

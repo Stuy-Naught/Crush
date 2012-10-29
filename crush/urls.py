@@ -17,7 +17,7 @@ urlpatterns = patterns('',
     url(r'^connect/', 'crush_connector.views.register'),
     url(r'^ctest/', 'ctest.views.index'),
     url(r'^about/', 'crush_connector.views.about'),
-    url(r'^validate/(.+)/(\d{10})/', 'crush_connector.views.validate'),
+    url(r'^validate/', 'crush_connector.views.validate'),
     url(r'^$', 'crush_connector.views.register'),
     url(r'^name-lookup/(.*)', 'name_lookup.views.lookup_mit_people'),
 )

@@ -47,7 +47,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = '/afs/athena.mit.edu/user/w/h/whaack/Scripts/django/crush/crush/static/'
+STATIC_ROOT = '/afs/athena.mit.edu/user/w/h/whaack/web_scripts/crush'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"

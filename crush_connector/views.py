@@ -42,6 +42,8 @@ def sendVerificationEmail(Person):
 def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
+        #TODO Create a database of all enrolled MIT students and then lookup username's email
+        #Use email= request.META['REDIRECT_SSL_CLIENT_S_DN_Email'] to get username's email
         if form.is_valid():
             print('form is valid')
             person, created = Person.objects.get_or_create(
@@ -66,13 +68,13 @@ def register(request):
 
     else:
         form = RegisterForm()
-        variables = RequestContext(request, {'form': form})
+        variables = RequestContext(request, {'form': form,})
+        #'email': request.META['REDIRECT_SSL_CLIENT_S_DN_Email']}) 
         return render_to_response('crush_connector/connect.html', variables)
 
 
 def about(request):
     return render_to_response('crush_connector/about.html')
 
-def validate(request, email, secretKey):
-    context = Context({'email': email, 'secretKey': secretKey})
-    return render_to_response('crush_connector/validate.html', context)
+def validate(request):
+    return render_to_response('crush_connector/validate.html')
