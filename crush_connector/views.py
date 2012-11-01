@@ -61,7 +61,9 @@ def submit(request):
             if confirmCrushAndEmail(person, crush_person):
                 print('match! check your email')
         return HttpResponseRedirect('/crush/success/')
-    return HttpResponseRedirect('/crush/')
+    else:
+        
+        return render_to_response('crush_connector/connect.html')
 
 def index(request):
     form = RegisterForm()
