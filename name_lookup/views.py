@@ -13,18 +13,35 @@ def mit_info(username):
     fixed_string = re.sub(' ', '+', username)
     fixed_string = re.sub('@mit.edu', '', fixed_string)
     response = urllib2.urlopen('http://web.mit.edu/bin/cgicso?options=general&query=%s' % fixed_string)
-    response_string = ' '.join([s[:-1] for s in response.readlines()])
+    response_string = ' '.join([s[:-1] + '|' for s in response.readlines()])
     info = re.match('.*<PRE>(.*)</PRE>', response_string).group(1)
     m = re.match('\s*name:(.*)\s*email: <A.*>(.*)</A>\s*address: (.*)\s*year: (.*)', info)
 
-    if m is not None:
-        name = m.group(1).strip()
-        email = m.group(2).strip()
-        address = m.group(3).strip()
-        year = m.group(4).strip()
-    
-        return {"name": name, "email": email, "address": address, "year": year}
+    if info is not None:
+        fields = ['name', 'email', 'address', 'year']
+        regexes = {}
+        info_res = {}
 
+        regexes['name'] = '.*\s*name:(.*?)\|.*'
+        regexes['email'] = '.*\s*email: <[aA] .*>(.*?)</[aA]>\|.*'
+        regexes['address'] = '.*\s*address:(.*?)\|.*'
+        regexes['year'] = '.*\s*year:(.*?)\|.*'
+
+        for field in fields:
+            try:
+                info_res[field] = re.match(regexes[field], info).group(1).strip()
+            except:
+                pass
+        if 'name' not in info_res:
+            info_res['name'] = username
+            info_res['email'] = username + '@mit.edu'
+        if 'year' in info_res:
+            try:
+                info_res['year'] = int(info_res['year'])
+            except:
+                del info_res['year']
+        return info_res
+                
     return {"email": "%s@mit.edu" % username}
 
 def lookup_mit_people(request, username):
@@ -41,7 +58,7 @@ def set_user_info(username):
     if 'address' in info:
         person.address = info['address']
     if 'year' in info:
-        person.name = info['year']
+        person.year = info['year']
     person.save()
 
 def ls(dir):
@@ -49,15 +66,17 @@ def ls(dir):
 
 def populate_names(request):
     print('starting populate_names')
-    names = subprocess.check_output('name_lookup/name-list.sh').split('\n')
-    names = names[2000:2020]
+    #names = subprocess.check_output('name_lookup/name-list.sh').split('\n')
+    names = open('name_list.txt', 'r').readlines()
+    names = [name.strip() for name in names]
+    #names = names[13460:13470]
     print names
     print('done getting name list')
     print('starting MIT people lookups')
     for username in names:
         print('  finding %s' % username)
         set_user_info(username)
-        time.sleep(0.1)
+        time.sleep(0.5)
     print('done MIT people lookups')
     
     #base_dir = '/afs/athena.mit.edu/user'
