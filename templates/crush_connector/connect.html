@@ -9,15 +9,13 @@
 </div>
 <div class="span6">
 <h1>find a crush</h1>
-<form action="https://whaack.scripts.mit.edu:444/crush/submit/" class="well" method="get" id="vent-form">
+<form action="https://whaack.scripts.mit.edu:444/crush/submit/" class="well" method="post" id="vent-form">
+{% csrf_token %}
   {{form.as_p}}
   <input type="submit" class="btn btn-primary" value="Submit crushes" id="crush-submitt"/>
 </form>
 </div>
 </div>
-<script>$( "#id_Crush_email_1" ).autocomplete({ source: function(request, response)
-{
-  
-} 
+<script>$( "#id_Crush_email_1" ).autocomplete({ source: [ {label: "William Haack : whaack@mit.edu", value:"whaack@mit.edu"}, {label: "Blake Elias : belias@mit.edu", value:"belias@mit.edu"}] 
 });</script>
 {% endblock %}

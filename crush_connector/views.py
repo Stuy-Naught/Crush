@@ -40,7 +40,7 @@ def sendVerificationEmail(Person):
     send_mail(SUBJECT, MESSAGE, FROM, EMAILS, fail_silently=False)
     
 def submit(request):
-    form = RegisterForm(request.GET)
+    form = RegisterForm(request.POST)
     if form.is_valid():
         print('form is valid')
         person, created = Person.objects.get_or_create(
@@ -57,13 +57,12 @@ def submit(request):
             crush_person.save()
             crush = Crush(crusher=person, crushee=crush_person)
             crush.save()
-                
             if confirmCrushAndEmail(person, crush_person):
                 print('match! check your email')
         return HttpResponseRedirect('/crush/success/')
-    else:
-        
-        return render_to_response('crush_connector/connect.html')
+    else:        
+        variables = RequestContext(request, {'form': form})
+        return render_to_response('crush_connector/connect.html', variables)
 
 def index(request):
     form = RegisterForm()
