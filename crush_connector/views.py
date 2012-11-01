@@ -50,14 +50,19 @@ def submit(request):
         person.save()
         for i in range(Crush.num_allowed_crushes):
             crush_email = form.cleaned_data['Crush_email_%d' % (i+1)]
+            if crush_email == '':
+                continue
             crush_person, created = Person.objects.get_or_create(
                 email = crush_email
                 )
-            crush_person.name = '__no_name__ %s' % crush_email
-            crush_person.save()
+            if created:
+                print('creating new person for the crush')
+                crush_person.name = '__no_name__  %s' % crush_email
+                crush_person.save()
             crush = Crush(crusher=person, crushee=crush_person)
             crush.save()
-                
+            person.num_crushes_used += 1
+            person.save()
             if confirmCrushAndEmail(person, crush_person):
                 print('match! check your email')
         return HttpResponseRedirect('/crush/success/')
