@@ -5,7 +5,7 @@ from crush_connector.models import Crush
 
 
 class RegisterForm(forms.Form):
-    error_css_class = 'error'
+    error_css_class = "control-group error"
     required_css_class = 'required'
 
     def __init__(self, *args, **kwargs):
