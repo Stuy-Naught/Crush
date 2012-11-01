@@ -4,7 +4,7 @@
 <div class="row">
 <div class="span6">
 <h1>find a crush</h1>
-<form action="https://whaack.scripts.mit.edu:444/crush" class="well" method="post" id="vent-form">{% csrf_token %}
+<form action="https://whaack.scripts.mit.edu:444/crush/submit/" class="well" method="get" id="vent-form">
   {{form.as_p}}
   <input type="submit" class="btn btn-primary" value="Submit crushes" id="crush-submitt"/>
 </form>

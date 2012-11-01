@@ -39,42 +39,37 @@ def sendVerificationEmail(Person):
     FROM = "crush@mit.edu"
     send_mail(SUBJECT, MESSAGE, FROM, EMAILS, fail_silently=False)
     
-def register(request):
-    if request.method == 'POST':
-        form = RegisterForm(request.POST)
-        #TODO Create a database of all enrolled MIT students and then lookup username's email
-        #Use email= request.META['REDIRECT_SSL_CLIENT_S_DN_Email'] to get username's email
-        if form.is_valid():
-            print('form is valid')
-            person, created = Person.objects.get_or_create(
-                email = form.cleaned_data['email']
+def submit(request):
+    form = RegisterForm(request.GET)
+    if form.is_valid():
+        print('form is valid')
+        person, created = Person.objects.get_or_create(
+                email = request.META['REDIRECT_SSL_CLIENT_S_DN_Email'] 
             )
-            person.name = form.cleaned_data['name']
-            person.save()
-            for i in range(Crush.num_allowed_crushes):
-                crush_email = form.cleaned_data['Crush_email_%d' % (i+1)]
-                crush_person, created = Person.objects.get_or_create(
-                    email = crush_email
+        person.name = request.META['REDIRECT_SSL_CLIENT_S_DN_CN']
+        person.save()
+        for i in range(Crush.num_allowed_crushes):
+            crush_email = form.cleaned_data['Crush_email_%d' % (i+1)]
+            crush_person, created = Person.objects.get_or_create(
+                email = crush_email
                 )
-                crush_person.name = '__no_name__ %s' % crush_email
-                crush_person.save()
-                crush = Crush(crusher=person, crushee=crush_person)
-                crush.save()
+            crush_person.name = '__no_name__ %s' % crush_email
+            crush_person.save()
+            crush = Crush(crusher=person, crushee=crush_person)
+            crush.save()
+                
+            if confirmCrushAndEmail(person, crush_person):
+                print('match! check your email')
+        return HttpResponseRedirect('/crush/success/')
+    return HttpResponseRedirect('/crush/')
 
-                if confirmCrushAndEmail(person, crush_person):
-                    print('match! check your email')
-            return HttpResponseRedirect('/admin')
-        return HttpResponseRedirect('/register')
-
-    else:
-        form = RegisterForm()
-        variables = RequestContext(request, {'form': form,})
-        #'email': request.META['REDIRECT_SSL_CLIENT_S_DN_Email']}) 
-        return render_to_response('crush_connector/connect.html', variables)
-
+def index(request):
+    form = RegisterForm()
+    variables = RequestContext(request, {'form': form,})
+    return render_to_response('crush_connector/connect.html', variables)
 
 def about(request):
     return render_to_response('crush_connector/about.html')
 
-def validate(request):
+def success(request):
     return render_to_response('crush_connector/validate.html')
