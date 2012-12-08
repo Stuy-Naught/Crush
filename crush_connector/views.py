@@ -100,3 +100,16 @@ def clearMiddleNames(request):
         person.name = name_list[0] + " " + name_list[-1]
         person.save()
     return HttpResponse("Done")
+
+def getEmails(request):
+    persons = Person.objects.all()
+    list = '['
+    first = True
+    for person in persons:
+        if (not first):
+            list += ","
+        first = False
+        list += '"' + person.email +'"'
+    list += ']'
+    return HttpResponse(list)
+            
