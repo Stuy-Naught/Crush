@@ -12,13 +12,17 @@ class RegisterForm(forms.Form):
         super(RegisterForm, self).__init__(*args, **kwargs)
         
         for i in range(Crush.num_allowed_crushes):
-            self.fields['Crush_email_%d' % (i+1)] = forms.EmailField(required=(i==0))
+            self.fields['Crush_email_%d' % (i+1)] = forms.MITEmailField(required=(i==0))
             # require at least one crush email, but not the others
 
-    def validate(self, value):
-        "Check if value consists only of valid MIT emails."
-        super(MultiEmailField, self).validate(value)
-        try:
-            Person.objects.get(email=value)
-        except:
-            raise ValidationError()
+class MITEmailField(forms.EmailField):
+    default_validators = [validate,]
+    
+def validate(value):
+    "Check if value consists only of valid MIT emails."
+    super(MITEmailField, self).validate(value)
+    try:
+        Person.objects.get(email=value)
+    except:
+        raise ValidationError('Not an active MIT email address.')
+    
