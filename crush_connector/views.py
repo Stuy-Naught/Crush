@@ -26,7 +26,7 @@ def confirmCrushAndEmail(Person1, Person2):
 
 def sendEmail(Person1, Person2):
     SUBJECT = 'Mutual Crush Found!'
-    MESSAGE = "Congradulations " + Person1.name + " and " + Person2.name + ", you both have a crush on each other!"
+    MESSAGE = "Congratulations " + Person1.name + " and " + Person2.name + ", you both have a crush on each other!"
     EMAILS = [Person1.email, Person2.email]
     FROM = "crush@mit.edu"
     send_mail(SUBJECT, MESSAGE, FROM, EMAILS, fail_silently=False)
@@ -65,7 +65,7 @@ def submit(request):
             person.save()
             if confirmCrushAndEmail(person, crush_person):
                 print('match! check your email')
-        return HttpResponseRedirect('/crush/success/')
+        return HttpResponseRedirect('/success/')
     else:        
         variables = RequestContext(request, {'form': form})
         return render_to_response('crush_connector/connect.html', variables)
@@ -80,3 +80,23 @@ def about(request):
 
 def success(request):
     return render_to_response('crush_connector/validate.html')
+
+def getlabels(request):
+    persons = Person.objects.all()
+    list = "["
+    first = True
+    for person in persons:
+        if (not first):
+            list += ","
+        first = False
+        list += '{"label": "' + person.name + " - " + person.email + '", "value": "' + person.email + '"}'
+    list += "]"
+    return HttpResponse(list)
+
+def clearMiddleNames(request):
+    persons = Person.objects.all()
+    for person in persons:
+        name_list = person.name.split(" ")
+        person.name = name_list[0] + " " + name_list[-1]
+        person.save()
+    return HttpResponse("Done")
