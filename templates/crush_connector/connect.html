@@ -40,9 +40,9 @@
 </div>
 <script>
 $.getJSON("http://crush.mit.edu/getlabels/", function(data){
-  $("#id_Crush_email_1").autocomplete({autoFocus: true, delay: 1, source: data})
-
+  $("#id_Crush_email_1").autocomplete({autoFocus: true, delay: 1, source: data});
+  $("#id_Crush_email_2").autocomplete({autoFocus: true, delay: 1, source: data});
+  $("#id_Crush_email_3").autocomplete({autoFocus: true, delay: 1, source: data});
 });
-$( "#id_Crush_email_2" ).autocomplete({autoFocus: true, source: [ {label: "William Haack : whaack@mit.edu", value:"whaack@mit.edu"}, {label: "Blake Elias : belias@mit.edu", value:"belias@mit.edu"}]
-});</script>
+</script>
 {% endblock %}
