@@ -1,12 +1,25 @@
 #!/bin/bash
 
+alphabet='abcdefghijklmnopqrstuvwxyz'
+
 for first_letter in $(ls /afs/athena.mit.edu/user)
 do
-    for second_letter in $(ls /afs/athena.mit.edu/user/$first_letter)
-    do
-	for athena_name in $(ls /afs/athena.mit.edu/user/$first_letter/$second_letter)
+    if [[ "$alphabet" == *"$first_letter"* ]]
+    then
+	for second_letter in $(ls /afs/athena.mit.edu/user/$first_letter)
 	do
-	    echo $athena_name
+	    if [[ "$alphabet" == *"$second_letter"* ]]
+	    then
+		for athena_name in $(ls /afs/athena.mit.edu/user/$first_letter/$second_letter)
+		do
+		    echo $athena_name
+		done
+	    fi
 	done
-    done
+    fi
+done
+
+for fucker in $(ls /afs/athena.mit.edu/user/other)
+do
+    echo $fucker
 done

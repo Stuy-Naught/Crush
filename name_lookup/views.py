@@ -33,9 +33,12 @@ def mit_info(username):
         for field in fields:
             for line in info:
                 try:
-                    info_res[field] = re.match(regexes[field], line).group(1).strip()
+                    matched_text = re.match(regexes[field], line).group(1).strip()
+                    info_res[field] = matched_text # do this on two lines so as not to overwrite info_res after it's already been found
                 except:
                     pass
+            if 'email' not in info_res:
+                info_res['email'] = username + '@mit.edu'
             if 'name' not in info_res:
                 info_res['name'] = username
                 info_res['email'] = username + '@mit.edu'
