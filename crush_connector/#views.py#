@@ -1,4 +1,4 @@
-from models import *
+B1;2cfrom models import *
 from django.core.mail import send_mail
 from django.template import Context, RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect

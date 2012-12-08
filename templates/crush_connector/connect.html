@@ -3,16 +3,19 @@
 {% block content %}
 <div class="row">
 <div class="span6">
-<h1>find a crush</h1>
-<form action="." class="well" method="post" id="vent-form">{% csrf_token %}
-  {{form.as_p}}
-  <input type="submit" class="btn btn-primary" value="Submit crushes" id="crush-submitt"/>
-</form>
-</div>
-<div class="span6">
 <h1> what is this</h1>
 <p>MIT Crush is a way to confess your crush to that friend that you want to be more than friends with. The beauty of MIT Crush, however, is that you and said friend will only be notified if the crush is mutual. Once a connection is made, both people are sent an email with the name of the mutual crush. If a crush is not mutual, no email is ever sent. </p>
 <img src="/static/img/MITCrushLogo.png">
 </div>
+<div class="span6">
+<h1>find a crush</h1>
+<form action="https://whaack.scripts.mit.edu:444/crush/submit/" class="well" method="post" id="vent-form">
+{% csrf_token %}
+  {{form.as_p}}
+  <input type="submit" class="btn btn-primary" value="Submit crushes" id="crush-submitt"/>
+</form>
 </div>
+</div>
+<script>$( "#id_Crush_email_1" ).autocomplete({ source: [ {label: "William Haack : whaack@mit.edu", value:"whaack@mit.edu"}, {label: "Blake Elias : belias@mit.edu", value:"belias@mit.edu"}] 
+});</script>
 {% endblock %}
