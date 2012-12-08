@@ -5,43 +5,47 @@ from models import *
 from django.http import HttpResponse, HttpResponseRedirect
 import json
 import time
+import os
 
 from crush_connector.models import Person, Crush
 from crush_connector.forms import RegisterForm
 
 def mit_info(username):
-    fixed_string = re.sub(' ', '+', username)
-    fixed_string = re.sub('@mit.edu', '', fixed_string)
-    response = urllib2.urlopen('http://web.mit.edu/bin/cgicso?options=general&query=%s' % fixed_string)
-    response_string = ' '.join([s[:-1] + '|' for s in response.readlines()])
-    info = re.match('.*<PRE>(.*)</PRE>', response_string).group(1)
-    m = re.match('\s*name:(.*)\s*email: <A.*>(.*)</A>\s*address: (.*)\s*year: (.*)', info)
+#    command = 'ldapsearch -LLL -x -h ldap-too -b "ou=users,ou=moira,dc=mit,dc=edu" "uid=%s"' % username
+#    print command
+#    info = subprocess.check_output(command)
+    print('working dir: %s' % os.getcwd())
+
+    info = open('name_lookup/user_info/%s' % username, 'r').readlines()
+    print info
 
     if info is not None:
         fields = ['name', 'email', 'address', 'year']
         regexes = {}
         info_res = {}
-
-        regexes['name'] = '.*\s*name:(.*?)\|.*'
-        regexes['email'] = '.*\s*email: <[aA] .*>(.*?)</[aA]>\|.*'
-        regexes['address'] = '.*\s*address:(.*?)\|.*'
-        regexes['year'] = '.*\s*year:(.*?)\|.*'
-
+        
+        
+        regexes['name'] = 'displayName: (.*)'
+        regexes['email'] = 'mail: (.*)'
+        regexes['address'] = 'street: (.*)'
+        regexes['year'] = 'mitDirStudentYear: (.*)'
+        
         for field in fields:
-            try:
-                info_res[field] = re.match(regexes[field], info).group(1).strip()
-            except:
-                pass
-        if 'name' not in info_res:
-            info_res['name'] = username
-            info_res['email'] = username + '@mit.edu'
-        if 'year' in info_res:
-            try:
-                info_res['year'] = int(info_res['year'])
-            except:
-                del info_res['year']
+            for line in info:
+                try:
+                    info_res[field] = re.match(regexes[field], line).group(1).strip()
+                except:
+                    pass
+            if 'name' not in info_res:
+                info_res['name'] = username
+                info_res['email'] = username + '@mit.edu'
+            if 'year' in info_res:
+                try:
+                    info_res['year'] = int(info_res['year'])
+                except:
+                    del info_res['year']
         return info_res
-                
+    
     return {"email": "%s@mit.edu" % username}
 
 def lookup_mit_people(request, username):
@@ -66,8 +70,9 @@ def ls(dir):
 
 def populate_names(request):
     print('starting populate_names')
+    print('working dir: %s' % os.getcwd())
     #names = subprocess.check_output('name_lookup/name-list.sh').split('\n')
-    names = open('name_list.txt', 'r').readlines()
+    names = open('name_lookup/name_list.txt', 'r').readlines()
     names = [name.strip() for name in names]
     #names = names[13460:13470]
     print names
