@@ -1,22 +1,92 @@
 import urllib2
 import re
-import xml.etree.ElementTree as ET
+import subprocess
 from models import *
 from django.http import HttpResponse, HttpResponseRedirect
+import json
+import time
+import os
+
 from crush_connector.models import Person, Crush
 from crush_connector.forms import RegisterForm
 
-def lookup_mit_people(request, string):
-    fixed_string = re.sub(' ', '+', string)
-    fixed_string = re.sub('@mit.edu', '', fixed_string)
-    response = urllib2.urlopen('http://web.mit.edu/bin/cgicso?options=general&query=%s' % fixed_string)
-    response_string = ' '.join([s[:-1] for s in response.readlines()])
-    info = re.match('.*<PRE>(.*)</PRE>', response_string).group(1)
-    m = re.match('\s*name:(.*)\s*email: <A.*>(.*)</A>\s*address: (.*)\s*year: (.*)', info)
+def mit_info(username):
+#    command = 'ldapsearch -LLL -x -h ldap-too -b "ou=users,ou=moira,dc=mit,dc=edu" "uid=%s"' % username
+#    print command
+#    info = subprocess.check_output(command)
+    print('working dir: %s' % os.getcwd())
 
-    name = m.group(1).strip()
-    email = m.group(2).strip()
-    address = m.group(3).strip()
-    year = m.group(4).strip()
+    info = open('name_lookup/user_info/%s' % username, 'r').readlines()
+    print info
+
+    if info is not None:
+        fields = ['name', 'email', 'address', 'year']
+        regexes = {}
+        info_res = {}
+        
+        
+        regexes['name'] = 'displayName: (.*)'
+        regexes['email'] = 'mail: (.*)'
+        regexes['address'] = 'street: (.*)'
+        regexes['year'] = 'mitDirStudentYear: (.*)'
+        
+        for field in fields:
+            for line in info:
+                try:
+                    info_res[field] = re.match(regexes[field], line).group(1).strip()
+                except:
+                    pass
+            if 'name' not in info_res:
+                info_res['name'] = username
+                info_res['email'] = username + '@mit.edu'
+            if 'year' in info_res:
+                try:
+                    info_res['year'] = int(info_res['year'])
+                except:
+                    del info_res['year']
+        return info_res
     
-    return HttpResponse('{"name": "%s", "email": "%s", "address": "%s", "year": "%s"}' % (name, email, address, year))
+    return {"email": "%s@mit.edu" % username}
+
+def lookup_mit_people(request, username):
+    info = mit_info(username)
+    return HttpResponse(json.dumps(info))
+
+def set_user_info(username):
+    person, created = Person.objects.get_or_create(email = username + '@mit.edu')
+    person.save()
+    info = mit_info(username)
+    person.email = info['email']
+    if 'name' in info:
+        person.name = info['name']
+    if 'address' in info:
+        person.address = info['address']
+    if 'year' in info:
+        person.year = info['year']
+    person.save()
+
+def ls(dir):
+    return subprocess.check_output('ls %s' % dir).split('\n')
+
+def populate_names(request):
+    print('starting populate_names')
+    print('working dir: %s' % os.getcwd())
+    #names = subprocess.check_output('name_lookup/name-list.sh').split('\n')
+    names = open('name_lookup/name_list.txt', 'r').readlines()
+    names = [name.strip() for name in names]
+    #names = names[13460:13470]
+    print names
+    print('done getting name list')
+    print('starting MIT people lookups')
+    for username in names:
+        print('  finding %s' % username)
+        set_user_info(username)
+        time.sleep(0.5)
+    print('done MIT people lookups')
+    
+    #base_dir = '/afs/athena.mit.edu/user'
+    #for first_letter in ls(base_dir):
+    #    for second_letter in ls('%s/%s' % (base_dir, first_letter)):
+    #        for athena_name in ls('%s/%s/%s' % (base_dir, first_letter, second_letter)):
+    #            set_user_info(athena_name)
+                
