@@ -81,17 +81,18 @@ def about(request):
 def success(request):
     return render_to_response('crush_connector/validate.html')
 
-def getlabels(request):
+def getlabels():
     persons = Person.objects.all()
-    list = "["
+    print("[")
     first = True
     for person in persons:
         if (not first):
-            list += ","
+            print(",")
         first = False
-        list += '{"label": "' + person.name + " - " + person.email + '", "value": "' + person.email + '"}'
-    list += "]"
-    return HttpResponse(list)
+        print('{"label": "' + person.name + " - " + person.email + '", "value": "' + person.email + '"}')
+    print("]")
+
+    #return HttpResponse(list)
 
 def clearMiddleNames(request):
     persons = Person.objects.all()

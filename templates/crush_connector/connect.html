@@ -39,7 +39,7 @@
 </div>
 </div>
 <script>
-$.getJSON("http://crush.mit.edu/getlabels/", function(data){
+$.getJSON("http://crush.mit.edu/static/js/names.js", function(data){
   $("#id_Crush_email_1").autocomplete({autoFocus: true, delay: 1, source: function(request, response){
 var results = $.ui.autocomplete.filter(data, request.term);
 response(results.slice(0, 10));
