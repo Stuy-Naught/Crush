@@ -63,7 +63,12 @@ def submit(request):
         if num_submitted > num_left:
             # too many, not allowed to submit this many crushes
             # throw error page, tell them to go back and submit fewer
-            variables = RequestContext(request, {'num_left': num_left, 'num_allowed': num_allowed, 'num_submitted': num_submitted, 'refresh_date': 'December 23, 2012'})
+            variables = RequestContext(request, {
+                'num_left': num_left,
+                'num_allowed': num_allowed,
+                'num_submitted': num_submitted,
+                'refresh_date': 'December 23, 2012'
+            })
             return render_to_response('crush_connector/over_limit.html', variables)
         
         for i in range(Crush.num_allowed_crushes):
@@ -83,9 +88,9 @@ def submit(request):
             person.save()
             if confirmCrushAndEmail(person, crush_person):
                 print('match! check your email')
+        num_left = num_left - num_submitted
         variables = RequestContext(request, {
             'num_left': num_left,
-            'num_submitted': num_submitted,
             'refresh_date': 'December 19, 2012'
         })
         return render_to_response('crush_connector/validate.html', variables)
