@@ -97,7 +97,12 @@ def clearMiddleNames(request):
     persons = Person.objects.all()
     for person in persons:
         name_list = person.name.split(" ")
-        person.name = name_list[0] + " " + name_list[-1]
+        if len(name_list) >= 2:
+            person.name = name_list[0] + " " + name_list[-1]
+        elif len(name_list) == 1:
+            person.name = name_list[0]
+        else:
+            person.name = "Invalid Name"
         person.save()
     return HttpResponse("Done")
 
