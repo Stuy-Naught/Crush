@@ -7,7 +7,7 @@ def validate(value):
     try:
         Person.objects.get(email=value)
     except:
-        raise ValidationError('Not an active MIT email address.')
+        raise forms.ValidationError('Not an active MIT email address.')
     
 class MITEmailField(forms.EmailField):
     default_validators = [validate,]
