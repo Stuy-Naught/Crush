@@ -1,0 +1,18 @@
+{% extends "crush_connector/index.django" %}
+
+{% block content %}
+<div class="row">
+  <div class="span6">
+    <h1>Too many crushes!</h1>
+    <p> Whoa there, you sure do like a lot of people! You've already submitted {{ num_submitted }} crushes, and you're allowed up to {{ num_allowed }}. Go back and make sure you submit no more than {{ num_left }}.</p>
+    <p> You're allowed to submit new crushes every two weeks, so come back on <b>{{ refresh_date }}</b> and send in more!</p>
+  </div>
+  <div class ="span6">
+    <img src="/static/img/MITCrushLogo.png">
+  </div>
+</div>
+{% endblock %}
+
+{% block tips %}
+{% endblock %}
+

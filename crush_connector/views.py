@@ -48,6 +48,24 @@ def submit(request):
             )
         person.name = request.META['REDIRECT_SSL_CLIENT_S_DN_CN']
         person.save()
+        
+        num_allowed = person.num_allowed_crushes
+        if num_allowed < 0:
+            num_allowed = Crush.num_allowed_crushes
+
+        num_submitted = 0
+        for i in range(Crush.num_allowed_crushes):
+            crush_email = form.cleaned_data['Crush_email_%d' % (i+1)]
+            if crush_email != '':
+                num_submitted += 1
+
+        num_left = num_allowed - person.num_crushes_used
+        if num_submitted > num_left:
+            # too many, not allowed to submit this many crushes
+            # throw error page, tell them to go back and submit fewer
+            variables = RequestContext(request, {'num_left': num_left, 'num_allowed': num_allowed, 'num_submitted': num_submitted, 'refresh_date': 'December 23, 2012'})
+            return render_to_response('crush_connector/over_limit.html', variables)
+        
         for i in range(Crush.num_allowed_crushes):
             crush_email = form.cleaned_data['Crush_email_%d' % (i+1)]
             if crush_email == '':
@@ -65,7 +83,12 @@ def submit(request):
             person.save()
             if confirmCrushAndEmail(person, crush_person):
                 print('match! check your email')
-        return HttpResponseRedirect('/success/')
+        variables = RequestContext(request, {
+            'num_left': num_left,
+            'num_submitted': num_submitted,
+            'refresh_date': 'December 19, 2012'
+        })
+        return render_to_response('crush_connector/validate.html', variables)
     else:        
         variables = RequestContext(request, {'form': form})
         return render_to_response('crush_connector/connect.html', variables)
