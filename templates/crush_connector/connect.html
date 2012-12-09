@@ -44,6 +44,9 @@
 <script>
 $(document).ready(function()
 {
+    $("#id_Crush_email_1").addClass("defaultTextActive");
+    $("#id_Crush_email_2").addClass("defaultTextActive");
+    $("#id_Crush_email_3").addClass("defaultTextActive");
     $("#id_Crush_email_1").focus(function(srcc)
     {
         if ($(this).val() == $(this)[0].value)
@@ -62,9 +65,51 @@ $(document).ready(function()
         }
     });
     
-    $(".defaultText").blur();        
+    $("#id_Crush_email_1").blur();
+
+$("#id_Crush_email_2").focus(function(srcc)
+    {
+        if ($(this).val() == $(this)[0].value)
+        {
+            $(this).removeClass("defaultTextActive");
+            $(this).val("");
+        }
+    });
+
+    $("#id_Crush_email_2").blur(function()
+    {
+        if ($(this).val() == "")
+        {
+            $(this).addClass("defaultTextActive");
+            $(this).val($(this)[0].value);
+        }
+    });
+
+    $("#id_Crush_email_2").blur();
+
 });
-$("#id_Crush_email_1").autocomplete({ focus: function(event, ui) { $("#id_Crush_email_1").val('');}, autoFocus: true, delay: 1, source: function(request, response){
+
+$("#id_Crush_email_3").focus(function(srcc)
+    {
+        if ($(this).val() == $(this)[0].value)
+        {
+            $(this).removeClass("defaultTextActive");
+            $(this).val("");
+        }
+    });
+
+    $("#id_Crush_email_3").blur(function()
+    {
+        if ($(this).val() == "")
+        {
+            $(this).addClass("defaultTextActive");
+            $(this).val($(this)[0].value);
+        }
+    });
+
+    $("#id_Crush_email_3").blur();
+
+$("#id_Crush_email_1").autocomplete({autoFocus: true, delay: 1, source: function(request, response){
 var results = $.ui.autocomplete.filter(data, request.term);
 response(results.slice(0, 10));
 }
