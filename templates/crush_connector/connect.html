@@ -40,9 +40,21 @@
 </div>
 <script>
 $.getJSON("http://crush.mit.edu/getlabels/", function(data){
-  $("#id_Crush_email_1").autocomplete({autoFocus: true, delay: 1, source: data});
-  $("#id_Crush_email_2").autocomplete({autoFocus: true, delay: 1, source: data});
-  $("#id_Crush_email_3").autocomplete({autoFocus: true, delay: 1, source: data});
+  $("#id_Crush_email_1").autocomplete({autoFocus: true, delay: 1, source: function(request, response){
+var results = $.ui.autocomplete.filter(data, request.term);
+response(results.slice(0, 10));
+}
+});
+$("#id_Crush_email_1").autocomplete({autoFocus: true, delay: 1, source: function(request, response){
+var results = $.ui.autocomplete.filter(data, request.term);
+response(results.slice(0, 10));
+}
+});
+$("#id_Crush_email_1").autocomplete({autoFocus: true, delay: 1, source: function(request, response){
+var results = $.ui.autocomplete.filter(data, request.term);
+response(results.slice(0, 10));
+}
+});
 });
 </script>
 {% endblock %}
