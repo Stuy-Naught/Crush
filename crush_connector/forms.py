@@ -5,7 +5,7 @@ from crush_connector.models import Crush
 def validate(value):
     "Check if value consists only of valid MIT emails."
     try:
-        Person.objects.get(email=value)
+        pass
     except:
         print('email raised exception: %s' % value)
         raise forms.ValidationError('Not an active MIT email address.')
