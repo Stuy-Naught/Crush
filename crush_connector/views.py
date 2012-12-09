@@ -66,7 +66,7 @@ def submit(request):
             variables = RequestContext(request, {
                 'num_left': num_left,
                 'num_allowed': num_allowed,
-                'num_submitted': num_submitted,
+                'num_used': person.num_crushes_used,
                 'refresh_date': 'December 23, 2012'
             })
             return render_to_response('crush_connector/over_limit.html', variables)
