@@ -21,5 +21,6 @@ class RegisterForm(forms.Form):
         super(RegisterForm, self).__init__(*args, **kwargs)
         
         for i in range(Crush.num_allowed_crushes):
-            self.fields['Crush_email_%d' % (i+1)] = MITEmailField(required=(i==0))
+            self.fields['Crush_email_%d' % (i+1)] = MITEmailField(required=(i==0), initial="Start by typing a name or email")
+            
             # require at least one crush email, but not the others
