@@ -82,9 +82,9 @@ def populate_names(request):
     print('done getting name list')
     print('starting MIT people lookups')
     for username in names:
-        print('  finding %s' % username)
-        set_user_info(username)
-        time.sleep(0.5)
+        if username > 'nikann': # got to this user last time
+            print('  finding %s' % username)
+            set_user_info(username)
     print('done MIT people lookups')
     
     #base_dir = '/afs/athena.mit.edu/user'
