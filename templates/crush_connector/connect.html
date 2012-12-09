@@ -38,13 +38,16 @@
 </form>
 </div>
 </div>
+<style media="screen" type="text/css">
+    .defaultTextActive { color: #a1a1a1; font-style: italic; }
+</style>
 <script>
 $(document).ready(function()
 {
 document.getElementById("id_Crush_email_1").title = "Start typing a name or email";
     $("#id_Crush_email_1").focus(function(srcc)
     {
-        if ($(this).val() == $(this)[0].title)
+        if ($(this).val() == $(this)[0].value)
         {
             $(this).removeClass("defaultTextActive");
             $(this).val("");
@@ -56,7 +59,7 @@ document.getElementById("id_Crush_email_1").title = "Start typing a name or emai
         if ($(this).val() == "")
         {
             $(this).addClass("defaultTextActive");
-            $(this).val($(this)[0].title);
+            $(this).val($(this)[0].value);
         }
     });
     
