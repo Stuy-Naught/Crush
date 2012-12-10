@@ -77,7 +77,7 @@ def submit(request):
         if num_submitted > num_left:
             last_submission = crushes[0].timestamp
             last_refresh = RefreshDates.objects.filter(date__lte = datetime.today()).order_by('-date')[0]
-            if last_refresh.date > last_submission:
+            if last_refresh.date > last_submission.date():
                 for crush in crushes:
                     crush.active = False
                 person.num_crushes_used = 0
