@@ -1,4 +1,5 @@
 from django.db import models
+import datetime
 
 # Create your models here.
 class Person(models.Model):
@@ -17,8 +18,21 @@ class Person(models.Model):
 class Crush(models.Model):
     crusher = models.ForeignKey(Person, related_name='crush_crushers')
     crushee = models.ForeignKey(Person, related_name='crush_crushees')
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField()
+    active = models.BooleanField(default=True)
 
     num_allowed_crushes = 3 # number of crushes a person can enter on the form
     def __unicode__(self):
         return "%s likes %s" % (self.crusher, self.crushee)
+
+    def save(self, *args, **kwargs):
+        '''On save, update timestamps'''
+        if not self.id:
+            self.created = datetime.datetime.today()
+        super(Crush, self).save(*args, **kwargs)
+
+class RefreshDates(models.Model):
+    date = models.DateField()
+
+    def __unicode__(self):
+        return "%s" % self.date
