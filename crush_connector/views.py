@@ -156,3 +156,5 @@ def quickSearch(name):
     matching = [s for s in list if name in s]
     return matching
     
+def getnames(request):
+    return render_to_response('crush_connector/names.json')
