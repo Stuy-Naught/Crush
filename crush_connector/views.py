@@ -105,10 +105,15 @@ def submit(request):
             if confirmCrushAndEmail(person, crush_person):
                 print('match! check your email')
         num_left = num_left - num_submitted
+
         variables = RequestContext(request, {
-            'num_left': num_left,
-            'refresh_date': 'December 19, 2012'
-        })
+                'num_left': num_left,
+                'num_allowed': num_allowed,
+                'num_used': person.num_crushes_used,
+                'refresh_date': next_refresh,
+                'crushees': crushees
+            })
+
         return render_to_response('crush_connector/validate.html', variables)
     else:        
         variables = RequestContext(request, {'form': form})
