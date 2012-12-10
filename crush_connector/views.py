@@ -80,6 +80,7 @@ def submit(request):
             if last_refresh.date > last_submission.date():
                 for crush in crushes:
                     crush.active = False
+                    crush.save()
                 person.num_crushes_used = 0
             else:
                 # too many, not allowed to submit this many crushes
