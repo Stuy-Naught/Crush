@@ -111,18 +111,17 @@ def about(request):
 def success(request):
     return render_to_response('crush_connector/validate.html')
 
-def getlabels():
-    persons = Person.objects.all()
-    print("[")
+def getlabels(request):
+    matching = quickSearch(request.GET.get('term', 'oawiejfoawiejf'))
+    list = "["
     first = True
-    for person in persons:
+    for person in matching:
         if (not first):
-            print(",")
+            list += " , "
         first = False
-        print('{"label": "' + person.name + " - " + person.email + '", "value": "' + person.email + '"}')
-    print("]")
-
-    #return HttpResponse(list)
+        list += '{"label": "' + person + '", "value": "' + person.split(" ")[-1] + '"}'
+    list += "]"
+    return HttpResponse(list)
 
 def clearMiddleNames(request):
     persons = Person.objects.all()
@@ -149,3 +148,11 @@ def getEmails(request):
     list += ']'
     return HttpResponse(list)
             
+def quickSearch(name):
+    persons = Person.objects.all()
+    list = []
+    for person in persons:
+        list.append(person.name + " " + person.email)
+    matching = [s for s in list if name in s]
+    return matching
+    
