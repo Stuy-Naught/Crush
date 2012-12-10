@@ -62,20 +62,18 @@ def submit(request):
 
         crushes = Crush.objects.filter(crusher=person).order_by('-timestamp')
         crushees = [crush.crushee for crush in crushes]
-
-        # TODO: make this work?
-        last_submission = crushes[0].timestamp
-
+        next_refresh = RefreshDates.objects.filter(date__gte = datetime.today()).order_by('date')[0]
         variables = RequestContext(request, {
                 'num_left': num_left,
                 'num_allowed': num_allowed,
                 'num_used': person.num_crushes_used,
-                'refresh_date': refresh_date,
+                'refresh_date': next_refresh,
                 'crushees': crushees
             })
     
         num_left = num_allowed - person.num_crushes_used
         if num_submitted > num_left:
+            last_submission = crushes[0].timestamp
             last_refresh = RefreshDates.objects.filter(date__lte = datetime.today()).order_by('-date')[0]
             if last_refresh.date > last_submission:
                 for crush in crushes:
