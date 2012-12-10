@@ -119,10 +119,13 @@ $("#id_Crush_email_3").focus(function(srcc)
         }
     });
 
-    $("#id_Crush_email_3").blur();
-
-$.getJSON("/names/", function(data){
+$("#id_Crush_email_3").blur();
+$.get("/names/", function(data1){
 alert("hey");
+alert(data1);
+//debugger;
+data = JSON.parse(data1);
+alert(data);
 $("#id_Crush_email_1").autocomplete({autoFocus: true, delay: 1, source: function(request, response){
 var results = $.ui.autocomplete.filter(data, request.term);
 response(data.slice(0, 10));

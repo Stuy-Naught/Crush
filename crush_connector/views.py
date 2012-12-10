@@ -124,14 +124,16 @@ def success(request):
     return render_to_response('crush_connector/validate.html')
 
 def getlabels(request):
-    matching = quickSearch(request.GET.get('term', 'oawiejfoawiejf'))
+    #matching = quickSearch(request.GET.get('term', 'oawiejfoawiejf'))
+    matching = Person.objects.all()
     list = "["
     first = True
     for person in matching:
         if (not first):
             list += " , "
         first = False
-        list += '{"label": "' + person + '", "value": "' + person.split(" ")[-1] + '"}'
+        #list += '{"label": "' + person + '", "value": "' + person.split(" ")[-1] + '"}'
+        list += '{"label": "' + person.name + " - " + person.email + '", "value": "' + person.email + '"}'
     list += "]"
     return HttpResponse(list)
 
@@ -170,3 +172,4 @@ def quickSearch(name):
     
 def getnames(request):
     return render_to_response('crush_connector/names.json')
+
