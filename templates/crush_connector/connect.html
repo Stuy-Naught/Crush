@@ -42,24 +42,24 @@
     .defaultTextActive { color: #a1a1a1; font-style: italic; }
 </style>
 <script>
+
+var class_prefix = "#id_Crush_email_";
+var id_nums = ["1", "2", "3"];
+
 //Make default text fields empty
 $('#vent-form').submit(function() {
-if ($("#id_Crush_email_1").val() == "Start by typing a name or email"){
-$("#id_Crush_email_1").val("");
-}
-if ($("#id_Crush_email_2").val() == "Start by typing a name or email"){
-$("#id_Crush_email_2").val("");
-}
-if ($("#id_Crush_email_3").val() == "Start by typing a name or email"){
-$("#id_Crush_email_3").val("");
-}
+  for (num in id_nums) {
+    if ($(class_prefix + num).val() == "Start by typing a name or email"){
+      $(class_prefix + num).val("");
+    }    
+  }
 });
+
 $(document).ready(function()
 {
-    $("#id_Crush_email_1").addClass("defaultTextActive");
-    $("#id_Crush_email_2").addClass("defaultTextActive");
-    $("#id_Crush_email_3").addClass("defaultTextActive");
-    $("#id_Crush_email_1").focus(function(srcc)
+  for (num in id_nums) {
+    $(class_prefix + num).addClass("defaultTextActive");
+    $(class_prefix + num).focus(function(srcc)
     {
         if ($(this).val() == $(this)[0].value)
         {
@@ -68,7 +68,7 @@ $(document).ready(function()
         }
     });
     
-    $("#id_Crush_email_1").blur(function()
+    $(class_prefix + num).blur(function()
     {
         if ($(this).val() == "")
         {
@@ -77,91 +77,31 @@ $(document).ready(function()
         }
     });
     
-    $("#id_Crush_email_1").blur();
+    $(class_prefix + num).blur();
+  }
 
-$("#id_Crush_email_2").focus(function(srcc)
-    {
-        if ($(this).val() == $(this)[0].value)
-        {
-            $(this).removeClass("defaultTextActive");
-            $(this).val("");
+  //do manual searches before all the usernames are loaded
+  for (num in id_nums) {
+    $(class_prefix + num).autocomplete({autoFocus: true, delay: 1, source: function(request, response){
+      $.getJSON("/getlabels/",
+        request,
+        function(data) {
+          response(data.slice(0, 10));
         }
-    });
+      );
+    }});
+  }
 
-    $("#id_Crush_email_2").blur(function()
-    {
-        if ($(this).val() == "")
-        {
-            $(this).addClass("defaultTextActive");
-            $(this).val($(this)[0].value);
-        }
-    });
-
-    $("#id_Crush_email_2").blur();
-
-});
-
-$("#id_Crush_email_3").focus(function(srcc)
-    {
-        if ($(this).val() == $(this)[0].value)
-        {
-            $(this).removeClass("defaultTextActive");
-            $(this).val("");
-        }
-    });
-
-    $("#id_Crush_email_3").blur(function()
-    {
-        if ($(this).val() == "")
-        {
-            $(this).addClass("defaultTextActive");
-            $(this).val($(this)[0].value);
-        }
-    });
-
-
-
-$("#id_Crush_email_3").blur();
-
-
-//do manual searches before all the usernames are loaded
-$("#id_Crush_email_1").autocomplete({autoFocus: true, delay: 1, source: function(request, response){
-$.getJSON("/getlabels/",
-request,
-function(data)
-{response(data.slice(0, 10));}
-);
-}});
-$("#id_Crush_email_2").autocomplete({autoFocus: true, delay: 1, source: function(request, response){
-$.getJSON("/getlabels/",
-request,
-function(data)
-{response(data.slice(0, 10));}
-);
-}});
-$("#id_Crush_email_3").autocomplete({autoFocus: true, delay: 1, source: function(request, response){
-$.getJSON("/getlabels/",
-request,
-function(data)
-{response(data.slice(0, 10));}
-);
-}});
-
-//load all the usernames
-$.get("/names/", function(data){
-data = JSON.parse(data);
-$("#id_Crush_email_1").autocomplete({autoFocus: true, delay: 1, source: function(request, response){
-var results = $.ui.autocomplete.filter(data, request.term);
-response(results.slice(0, 10));
-}});
-$("#id_Crush_email_2").autocomplete({autoFocus: true, delay: 1, source: function(request, response){
-var results = $.ui.autocomplete.filter(data, request.term);
-response(results.slice(0, 10));
-}});
-$("#id_Crush_email_3").autocomplete({autoFocus: true, delay: 1, source: function(request, response){
-var results = $.ui.autocomplete.filter(data, request.term);
-response(results.slice(0, 10));
-}});
+  //load all the usernames
+  $.get("/names/", function(data){
+    data = JSON.parse(data);
+    for (num in id_nums) {
+      $(class_prefix + num).autocomplete({autoFocus: true, delay: 1, source: function(request, response){
+        var results = $.ui.autocomplete.filter(data, request.term);
+        response(results.slice(0, 10));
+      }});
+    }
+  });
 });
 
 </script>
