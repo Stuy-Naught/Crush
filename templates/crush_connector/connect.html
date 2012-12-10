@@ -42,6 +42,18 @@
     .defaultTextActive { color: #a1a1a1; font-style: italic; }
 </style>
 <script>
+//Make default text fields empty
+$('#vent-form').submit(function() {
+if ($("#id_Crush_email_1").val() == "Start by typing a name or email"){
+$("#id_Crush_email_1").val("");
+}
+if ($("#id_Crush_email_2").val() == "Start by typing a name or email"){
+$("#id_Crush_email_2").val("");
+}
+if ($("#id_Crush_email_3").val() == "Start by typing a name or email"){
+$("#id_Crush_email_3").val("");
+}
+});
 $(document).ready(function()
 {
     $("#id_Crush_email_1").addClass("defaultTextActive");

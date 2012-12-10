@@ -38,17 +38,16 @@ def sendVerificationEmail(Person):
     EMAILS = [Person.email]
     FROM = "crush@mit.edu"
     send_mail(SUBJECT, MESSAGE, FROM, EMAILS, fail_silently=False)
-    
+
 def submit(request):
     form = RegisterForm(request.POST)
     if form.is_valid():
         print('form is valid')
-        person, created = Person.objects.get_or_create(
-                email = request.META['REDIRECT_SSL_CLIENT_S_DN_Email'] 
+        if not 'REDIRECT_SSL_CLIENT_S_DN_Email' in request.META:
+            return render_to_response('crush_connector/need_certificate.html')
+        person = Person.objects.get(
+            email = request.META['REDIRECT_SSL_CLIENT_S_DN_Email'] 
             )
-        person.name = request.META['REDIRECT_SSL_CLIENT_S_DN_CN']
-        person.save()
-        
         num_allowed = person.num_allowed_crushes
         if num_allowed < 0:
             num_allowed = Crush.num_allowed_crushes
