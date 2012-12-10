@@ -44,11 +44,11 @@
 <script>
 
 var class_prefix = "#id_Crush_email_";
-var id_nums = ["1", "2", "3"];
+var num_fields = 3;
 
 //Make default text fields empty
 $('#vent-form').submit(function() {
-  for (num in id_nums) {
+  for (var num = 1; num <= num_fields; ++num) {
     if ($(class_prefix + num).val() == "Start by typing a name or email"){
       $(class_prefix + num).val("");
     }    
@@ -57,7 +57,7 @@ $('#vent-form').submit(function() {
 
 $(document).ready(function()
 {
-  for (num in id_nums) {
+  for (var num = 1; num <= num_fields; ++num) {
     $(class_prefix + num).addClass("defaultTextActive");
     $(class_prefix + num).focus(function(srcc)
     {
@@ -81,7 +81,7 @@ $(document).ready(function()
   }
 
   //do manual searches before all the usernames are loaded
-  for (num in id_nums) {
+  for (var num = 1; num <= num_fields; ++num) {
     $(class_prefix + num).autocomplete({autoFocus: true, delay: 1, source: function(request, response){
       $.getJSON("/getlabels/",
         request,
@@ -95,7 +95,7 @@ $(document).ready(function()
   //load all the usernames
   $.get("/names/", function(data){
     data = JSON.parse(data);
-    for (num in id_nums) {
+    for (var num = 1; num <= num_fields; ++num) {
       $(class_prefix + num).autocomplete({autoFocus: true, delay: 1, source: function(request, response){
         var results = $.ui.autocomplete.filter(data, request.term);
         response(results.slice(0, 10));
