@@ -28,7 +28,7 @@ class Crush(models.Model):
     def save(self, *args, **kwargs):
         '''On save, update timestamps'''
         if not self.id:
-            self.created = datetime.datetime.today()
+            self.timestamp = datetime.datetime.today()
         super(Crush, self).save(*args, **kwargs)
 
 class RefreshDates(models.Model):
