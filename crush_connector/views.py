@@ -60,9 +60,12 @@ def submit(request):
             if crush_email != '':
                 num_submitted += 1
 
+        num_left = num_allowed - person.num_crushes_used
+
         crushes = Crush.objects.filter(crusher=person).order_by('-timestamp')
         crushees = [crush.crushee for crush in crushes]
         next_refresh = RefreshDates.objects.filter(date__gte = datetime.today()).order_by('date')[0]
+
         variables = RequestContext(request, {
                 'num_left': num_left,
                 'num_allowed': num_allowed,
@@ -71,7 +74,6 @@ def submit(request):
                 'crushees': crushees
             })
     
-        num_left = num_allowed - person.num_crushes_used
         if num_submitted > num_left:
             last_submission = crushes[0].timestamp
             last_refresh = RefreshDates.objects.filter(date__lte = datetime.today()).order_by('-date')[0]
