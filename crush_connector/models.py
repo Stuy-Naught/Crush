@@ -18,7 +18,14 @@ class Crush(models.Model):
     crusher = models.ForeignKey(Person, related_name='crush_crushers')
     crushee = models.ForeignKey(Person, related_name='crush_crushees')
     timestamp = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
 
     num_allowed_crushes = 3 # number of crushes a person can enter on the form
     def __unicode__(self):
         return "%s likes %s" % (self.crusher, self.crushee)
+
+class RefreshDates(models.Model):
+    date = models.DateField()
+
+    def __unicode__(self):
+        return "%s" % self.date

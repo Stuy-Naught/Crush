@@ -3,11 +3,12 @@ from django.core.mail import send_mail
 from django.template import Context, RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
-from crush_connector.models import Person, Crush
+from crush_connector.models import Person, Crush, RefreshDates
 from crush_connector.forms import RegisterForm
+from datetime import datetime, timedelta
 
 def isMatch(Person1, Person2):
-    crushes = Crush.objects.all()
+    crushes = Crush.objects.filter(active=True)
     one_likes_two = False
     two_likes_one = False
     for crush in crushes:
@@ -59,20 +60,31 @@ def submit(request):
             if crush_email != '':
                 num_submitted += 1
 
-        num_left = num_allowed - person.num_crushes_used
-        if num_submitted > num_left:
-            # too many, not allowed to submit this many crushes
-            # throw error page, tell them to go back and submit fewer
-            crushes = Crush.objects.filter(crusher=person)
-            crushees = [crush.crushee for crush in crushes]
-            variables = RequestContext(request, {
+        crushes = Crush.objects.filter(crusher=person).order_by('-timestamp')
+        crushees = [crush.crushee for crush in crushes]
+
+        # TODO: make this work?
+        last_submission = crushes[0].timestamp
+
+        variables = RequestContext(request, {
                 'num_left': num_left,
                 'num_allowed': num_allowed,
                 'num_used': person.num_crushes_used,
-                'refresh_date': 'December 23, 2012',
+                'refresh_date': refresh_date,
                 'crushees': crushees
             })
-            return render_to_response('crush_connector/over_limit.html', variables)
+    
+        num_left = num_allowed - person.num_crushes_used
+        if num_submitted > num_left:
+            last_refresh = RefreshDates.objects.filter(date__lte = datetime.today()).order_by('-date')[0]
+            if last_refresh.date > last_submission:
+                for crush in crushes:
+                    crush.active = False
+                person.num_crushes_used = 0
+            else:
+                # too many, not allowed to submit this many crushes
+                # throw error page, tell them to go back and submit fewer and wait til refresh date to submit more
+                return render_to_response('crush_connector/over_limit.html', variables)
         
         for i in range(Crush.num_allowed_crushes):
             crush_email = form.cleaned_data['Crush_email_%d' % (i+1)]
