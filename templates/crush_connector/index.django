@@ -74,11 +74,11 @@
       </div>
       <div class="span4">
         <h2>Who should I choose?</h2>
-        <p>You should choose three people you have a crush on! The best people to choose are those who you've had a few interactions with. While there is a chance that the girl/guy who you've had your eye on during class but never actually talked to has a crush on you, the chance of them putting you down if you haven't interacted is low.</p>
+        <p>You should choose three people you have a crush on! The best people to choose are those who you've had a few interactions with, and who have expressed some interest in you. While there is a chance that the girl/guy who you've had your eye on during class has a crush on you, if you have never talked to them the chance of them putting you down is low.</p>
       </div>
         <div class="span4">
           <h2>But what if I don't get an email? :(</h2>
-          <p>The beauty of this tool is it only gives you closure on whether or not someone likes you if it's in your favor. But if you want to increase the chances of that oh-so-desired email, you should link this website around!</p>
+          <p>Come back in two weeks to submit more crushes! You can list anyone you want: the same people or new ones. In the meantime, send the link to more people to increase the chance that your crush sees the site!</p>
         </div>
     </div>
     {% endblock %}
