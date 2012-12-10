@@ -62,11 +62,14 @@ def submit(request):
         if num_submitted > num_left:
             # too many, not allowed to submit this many crushes
             # throw error page, tell them to go back and submit fewer
+            crushes = Crush.objects.filter(crusher=person)
+            crushees = [crush.crushee for crush in crushes]
             variables = RequestContext(request, {
                 'num_left': num_left,
                 'num_allowed': num_allowed,
                 'num_used': person.num_crushes_used,
-                'refresh_date': 'December 23, 2012'
+                'refresh_date': 'December 23, 2012',
+                'crushees': crushees
             })
             return render_to_response('crush_connector/over_limit.html', variables)
         
