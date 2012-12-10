@@ -1,6 +1,11 @@
 {% extends "crush_connector/index.django" %}
 
 {% block content %}
+<script>
+if (location.protocol == "https:"){
+window.location = "http://crush.mit.edu";
+}
+</script>
 <div class="row">
 <div class="span6">
 <h1> what is this</h1>
@@ -122,8 +127,6 @@ $("#id_Crush_email_3").focus(function(srcc)
 
 
 $("#id_Crush_email_3").blur();
-
-
 //do manual searches before all the usernames are loaded
 $("#id_Crush_email_1").autocomplete({autoFocus: true, delay: 1, source: function(request, response){
 $.getJSON("/getlabels/",
@@ -146,13 +149,13 @@ function(data)
 {response(data.slice(0, 10));}
 );
 }});
-
 //load all the usernames
 $.get("/names/", function(data){
 data = JSON.parse(data);
 $("#id_Crush_email_1").autocomplete({autoFocus: true, delay: 1, source: function(request, response){
 var results = $.ui.autocomplete.filter(data, request.term);
-response(results.slice(0, 10));
+response(results);
+//response(results.slice(0, 10));
 }});
 $("#id_Crush_email_2").autocomplete({autoFocus: true, delay: 1, source: function(request, response){
 var results = $.ui.autocomplete.filter(data, request.term);
