@@ -176,7 +176,7 @@ def auth(request):
 
 def form(request):
     print('at form')
-    if request.session['auth']:
+    if 'auth' in request.session and 'email' in request.session:
         emailDebug('retrieved session')
         form = RegisterForm()
         variables = RequestContext(request, {'form': form,})
