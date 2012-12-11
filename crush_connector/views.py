@@ -45,9 +45,9 @@ def sendEmailNoMatch(Person2):
 
 An anonymous MIT student has a crush on you! Go on http://crush.mit.edu, fill out a list of people you have a crush on, and see if there\'s a match!
 
-MIT Crush is a way to submit anonymous crushes on people. If a crush is mutual, however, then both people who submitted the anonymous crush are informed that the other person feels the same way.
+MIT Crush is a way to submit anonymous crushes on people. If a crush is mutual then both people who submitted the anonymous crush are informed that the other person feels the same way.
 
-Sincerely,
+Good luck,
 MIT Crush
 http://crush.mit.edu''' % Person2.name
     EMAILS = [Person2.email]
