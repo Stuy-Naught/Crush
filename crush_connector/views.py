@@ -47,7 +47,7 @@ An anonymous MIT student has a crush on you. Go on crush.mit.edu, fill out a lis
 
 MIT Crush is a way to submit anonymous crushes on people. If a crush is mutual, however, then both people who submitted the anonymous crush are informed that the other person feels the same way.
 
-Somebody has a crush on you -- why don\'t you go list your crushes and see if it\s the same person!''' % Person2.name
+Somebody has a crush on you -- why don\'t you go <a href="http://crush.mit.edu">list your crushes</a> and see if it\s the same person!''' % Person2.name
     EMAILS = [Person2.email]
     FROM = 'crush@mit.edu'
     send_mail(SUBJECT, MESSAGE, FROM, EMAILS, fail_silently=False)
