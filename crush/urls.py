@@ -24,4 +24,7 @@ urlpatterns = patterns('',
     url(r'^clearmiddlenames/', 'crush_connector.views.clearMiddleNames'),
     url(r'^populate-names/', 'name_lookup.views.populate_names'),
     url(r'^names/', 'crush_connector.views.getnames'),
+    url(r'^need_certificate/', 'crush_connector.views.need_certificate'),
+    url(r'^over_limit/', 'crush_connector.views.over_limit'),
+
                        )

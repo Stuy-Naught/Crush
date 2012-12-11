@@ -2,7 +2,7 @@ from models import *
 from django.core.mail import send_mail
 from django.template import Context, RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from crush_connector.models import Person, Crush, RefreshDates
 from crush_connector.forms import RegisterForm
 from datetime import datetime, timedelta
@@ -45,7 +45,7 @@ def submit(request):
     if form.is_valid():
         print('form is valid')
         if not 'REDIRECT_SSL_CLIENT_S_DN_Email' in request.META:
-            return render_to_response('crush_connector/need_certificate.html')
+            return redirect('http://crush.mit.edu/need_certificate')
         person = Person.objects.get(
             email = request.META['REDIRECT_SSL_CLIENT_S_DN_Email'] 
             )
@@ -70,7 +70,7 @@ def submit(request):
                 'num_allowed': num_allowed,
                 'num_used': person.num_crushes_used,
                 'refresh_date': next_refresh,
-                'crushees': crushees
+                'crushees': crushees,
             })
     
         if num_submitted > num_left:
@@ -85,7 +85,7 @@ def submit(request):
                 # too many, not allowed to submit this many crushes
                 # throw error page, tell them to go back and submit fewer and wait til refresh date to submit more
                 return render_to_response('crush_connector/over_limit.html', variables)
-        
+#               return HttpResponseRedirect('http://crush.mit.edu/over_limit', variables)
         for i in range(Crush.num_allowed_crushes):
             crush_email = form.cleaned_data['Crush_email_%d' % (i+1)]
             if crush_email == '':
@@ -177,3 +177,8 @@ def quickSearch(name):
 def getnames(request):
     return render_to_response('crush_connector/names.json')
 
+def need_certificate(request):
+    return render_to_response('crush_connector/need_certificate.html')
+
+def over_limit(request):
+    return render_to_response('crush_connector/over_limit.html', request)
