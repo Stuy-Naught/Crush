@@ -3,7 +3,7 @@ from django.core.mail import send_mail
 from django.template import Context, RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, redirect
-from crush_connector.models import Person, Crush, RefreshDates
+from crush_connector.models import Person, Crush, RefreshDates, PersonBeenNotified
 from crush_connector.forms import RegisterForm
 from datetime import datetime, timedelta
 
@@ -66,10 +66,10 @@ def submit(request):
     form = RegisterForm(request.POST)
     if form.is_valid():
         print('form is valid')
-        if not 'REDIRECT_SSL_CLIENT_S_DN_Email' in request.META:
+        if not 'email' in request.session:
             return redirect('http://crush.mit.edu/need_certificate')
         person = Person.objects.get(
-            email = request.META['REDIRECT_SSL_CLIENT_S_DN_Email'] 
+            email = request.session['email'] 
             )
         num_allowed = person.num_allowed_crushes
         if num_allowed < 0:
@@ -149,10 +149,42 @@ def submit(request):
         variables = RequestContext(request, {'form': form})
         return render_to_response('crush_connector/connect.html', variables)
 
+def emailDebug(message):
+    SUBJECT = "MIT Crush Debug 5"
+    EMAILS = ['blakeelias@gmail.com']
+    FROM = "crush@mit.edu"
+    send_mail(SUBJECT, message, FROM, EMAILS, fail_silently=False)
+    
 def index(request):
-    form = RegisterForm()
-    variables = RequestContext(request, {'form': form,})
-    return render_to_response('crush_connector/connect.html', variables)
+    emailDebug('at index')
+    return HttpResponseRedirect('https://crush.mit.edu:444/auth/')
+
+def auth(request):
+    emailDebug('at auth')
+    if not 'REDIRECT_SSL_CLIENT_S_DN_Email' in request.META:
+        return redirect('http://crush.mit.edu/need_certificate')
+    emailDebug('got certificate')
+    person = Person.objects.get(
+        email = request.META['REDIRECT_SSL_CLIENT_S_DN_Email'] 
+    )
+    emailDebug('got email')
+
+    request.session['email'] = person.email
+    request.session['auth'] = True
+    emailDebug('saved session')
+    return redirect('http://crush.mit.edu/form/')
+
+def form(request):
+    print('at form')
+    if 'auth' in request.session and 'email' in request.session:
+        emailDebug('retrieved session')
+        form = RegisterForm()
+        variables = RequestContext(request, {'form': form,})
+        emailDebug('rendering response')
+        return render_to_response('crush_connector/connect.html', variables)
+    else:
+        emailDebug('no certificate')
+        return redirect('http://crush.mit.edu/need_certificate')
 
 def about(request):
     return render_to_response('crush_connector/about.html')
