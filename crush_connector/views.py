@@ -3,7 +3,7 @@ from django.core.mail import send_mail
 from django.template import Context, RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, redirect
-from crush_connector.models import Person, Crush, RefreshDates
+from crush_connector.models import Person, Crush, RefreshDates, PersonBeenNotified
 from crush_connector.forms import RegisterForm
 from datetime import datetime, timedelta
 
@@ -150,9 +150,23 @@ def submit(request):
         return render_to_response('crush_connector/connect.html', variables)
 
 def index(request):
-    form = RegisterForm()
-    variables = RequestContext(request, {'form': form,})
-    return render_to_response('crush_connector/connect.html', variables)
+    if not 'REDIRECT_SSL_CLIENT_S_DN_Email' in request.META:
+        return redirect('http://crush.mit.edu/need_certificate')
+    person = Person.objects.get(
+        email = request.META['REDIRECT_SSL_CLIENT_S_DN_Email'] 
+    )
+
+    request.session['person'] = person
+    request.session['auth'] = True
+    return redirect('/form/')
+
+def form(request):
+    if request.session['auth']:
+        form = RegisterForm()
+        variables = RequestContext(request, {'form': form,})
+        return render_to_response('crush_connector/connect.html', variables)
+    else:
+        fail
 
 def about(request):
     return render_to_response('crush_connector/about.html')
