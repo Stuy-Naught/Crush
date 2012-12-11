@@ -84,7 +84,10 @@ def submit(request):
         num_left = num_allowed - person.num_crushes_used
 
         crushes = Crush.objects.filter(crusher=person).order_by('-timestamp')
-        mutual = [crush.crushee if isMatch(person, crush.crushee) for crush in crushes]
+        mutual = []
+        for crush in crushes:
+            if isMatch(person, crush.crushee):
+                mutual.append(crush.crushee)
         crushees = [(crush.crushee, crush.crushee in mutual) for crush in crushes]
         next_refresh = RefreshDates.objects.filter(date__gte = datetime.today()).order_by('date')[0]
 
