@@ -150,7 +150,7 @@ def submit(request):
         return render_to_response('crush_connector/connect.html', variables)
 
 def emailDebug(message):
-    SUBJECT = "MIT Crush Debug 1"
+    SUBJECT = "MIT Crush Debug 2"
     EMAILS = ['blakeelias@gmail.com']
     FROM = "crush@mit.edu"
     send_mail(SUBJECT, message, FROM, EMAILS, fail_silently=False)
