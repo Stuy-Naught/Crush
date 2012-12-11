@@ -127,6 +127,9 @@ def submit(request):
                 print('match! check your email')
         num_left = num_left - num_submitted
 
+        crushes = Crush.objects.filter(crusher=person).order_by('-timestamp')
+        crushees = [crush.crushee for crush in crushes]
+
         variables = RequestContext(request, {
                 'num_left': num_left,
                 'num_allowed': num_allowed,
