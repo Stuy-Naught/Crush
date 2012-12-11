@@ -241,3 +241,6 @@ def need_certificate(request):
 
 def over_limit(request):
     return render_to_response('crush_connector/over_limit.html', request)
+
+def splash(request):
+    return render_to_response('crush_connector/launching_soon.html')
