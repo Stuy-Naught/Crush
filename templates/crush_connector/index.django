@@ -19,8 +19,8 @@
   })();
 
 </script>
-    <link href="http://whaack.scripts.mit.edu//static/css/start/jquery-ui-1.9.1.custom.css" rel="stylesheet">
-    <script src="http://whaack.scripts.mit.edu/static/js/jquery-ui-1.9.1.custom.js"></script>
+    <link href="/static/css/start/jquery-ui-1.9.1.custom.css" rel="stylesheet">
+    <script src="/static/js/jquery-ui-1.9.1.custom.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
     <meta charset="utf-8">
     <title>MIT Crush</title>
