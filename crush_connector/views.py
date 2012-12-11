@@ -150,7 +150,7 @@ def submit(request):
         return render_to_response('crush_connector/connect.html', variables)
 
 def index(request):
-    f = open('/afs/athena.mit.edu/user/e/l/eliasb/crush.log', 'w')
+    f = open('/afs/athena.mit.edu/user/w/h/whaack/crush.log', 'w')
     f.write('at index')
     f.close()
     return redirect('https://crush.mit.edu:444/auth/')
