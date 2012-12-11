@@ -12,8 +12,10 @@
 
     <p>Here are the crushes you submitted:
       <ul>
-	{% for crush in crushees %}
-	  <li>{{ crush.name }} - {{ crush.email }}</li>
+	{% for crush, mutual in crushees %}
+	  <li>{{ crush.name }} - {{ crush.email }}
+	    {% if mutual %} (mutual!) {% endif %}
+	  </li>
 	{% endfor %}
       </ul>
     </p>

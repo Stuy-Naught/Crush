@@ -84,7 +84,11 @@ def submit(request):
         num_left = num_allowed - person.num_crushes_used
 
         crushes = Crush.objects.filter(crusher=person).order_by('-timestamp')
-        crushees = [crush.crushee for crush in crushes]
+        mutual = []
+        for crush in crushes:
+            if isMatch(person, crush.crushee):
+                mutual.append(crush.crushee)
+        crushees = [(crush.crushee, crush.crushee in mutual) for crush in crushes]
         next_refresh = RefreshDates.objects.filter(date__gte = datetime.today()).order_by('date')[0]
 
         variables = RequestContext(request, {
@@ -107,7 +111,8 @@ def submit(request):
                 # too many, not allowed to submit this many crushes
                 # throw error page, tell them to go back and submit fewer and wait til refresh date to submit more
                 return render_to_response('crush_connector/over_limit.html', variables)
-#               return HttpResponseRedirect('http://crush.mit.edu/over_limit', variables)
+
+        matches = []
         for i in range(Crush.num_allowed_crushes):
             crush_email = form.cleaned_data['Crush_email_%d' % (i+1)]
             if crush_email == '':
@@ -125,10 +130,11 @@ def submit(request):
             person.save()
             if confirmCrushAndEmail(person, crush_person):
                 print('match! check your email')
+                matches.append(crush_person)
         num_left = num_left - num_submitted
 
         crushes = Crush.objects.filter(crusher=person).order_by('-timestamp')
-        crushees = [crush.crushee for crush in crushes]
+        crushees = [(crush.crushee, crush.crushee in matches) for crush in crushes]
 
         variables = RequestContext(request, {
                 'num_left': num_left,
