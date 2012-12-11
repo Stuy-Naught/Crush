@@ -150,25 +150,34 @@ def submit(request):
         return render_to_response('crush_connector/connect.html', variables)
 
 def index(request):
+    print('at index')
     return redirect('https://crush.mit.edu:444/auth/')
 
 def auth(request):
+    print('at auth')
     if not 'REDIRECT_SSL_CLIENT_S_DN_Email' in request.META:
         return redirect('http://crush.mit.edu/need_certificate')
+    print('got certificate')
     person = Person.objects.get(
         email = request.META['REDIRECT_SSL_CLIENT_S_DN_Email'] 
     )
+    print('got email')
 
-    request.session['person'] = person
+    request.session['email'] = person.email
     request.session['auth'] = True
+    print('saved session')
     return redirect('http://crush.mit.edu/form/')
 
 def form(request):
+    print('at form')
     if request.session['auth']:
+        print('retrieved session')
         form = RegisterForm()
         variables = RequestContext(request, {'form': form,})
+        print('rendering response')
         return render_to_response('crush_connector/connect.html', variables)
     else:
+        print('no certificate')
         return redirect('http://crush.mit.edu/need_certificate')
 
 def about(request):
