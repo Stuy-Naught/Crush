@@ -47,8 +47,6 @@ An anonymous MIT student has a crush on you! Go on http://crush.mit.edu, fill ou
 
 MIT Crush is a way to submit anonymous crushes on people. If a crush is mutual, however, then both people who submitted the anonymous crush are informed that the other person feels the same way.
 
-Somebody has a crush on you -- why don\'t you go list your crushes</a> and see if it\'s the same person!
-
 Sincerely,
 MIT Crush
 http://crush.mit.edu''' % Person2.name
@@ -94,7 +92,7 @@ def submit(request):
                 'num_allowed': num_allowed,
                 'num_used': person.num_crushes_used,
                 'refresh_date': next_refresh,
-                'crushees': crushees,
+                'crushees': crushees
             })
     
         if num_submitted > num_left:
