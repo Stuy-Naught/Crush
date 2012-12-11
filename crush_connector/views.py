@@ -43,7 +43,7 @@ def sendEmailNoMatch(Person2):
     SUBJECT = 'An anonymous MIT student has a crush on you...'
     MESSAGE = '''Dear %s,
 
-An anonymous MIT student has a crush on you. Go on http://crush.mit.edu, fill out a list of people you have a crush on, and see if there\'s a match!'''
+An anonymous MIT student has a crush on you. Go on http://crush.mit.edu, fill out a list of people you have a crush on, and see if there\'s a match!''' % Person2.name
     EMAILS = [Person2.email]
     FROM = 'crush@mit.edu'
     send_mail(SUBJECT, MESSAGE, FROM, EMAILS, fail_silently=False)
