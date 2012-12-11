@@ -36,3 +36,7 @@ class RefreshDates(models.Model):
 
     def __unicode__(self):
         return "%s" % self.date
+
+class PersonBeenNotified(models.Model):
+    '''Make sure we only email a person once when someone has a crush on them. This object gets created when we notify them, so if an object exists with their user name they have been notified.'''
+    person = models.ForeignKey(Person)
