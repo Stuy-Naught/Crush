@@ -166,7 +166,7 @@ def form(request):
         variables = RequestContext(request, {'form': form,})
         return render_to_response('crush_connector/connect.html', variables)
     else:
-        fail
+        return redirect('http://crush.mit.edu/need_certificate')
 
 def about(request):
     return render_to_response('crush_connector/about.html')
