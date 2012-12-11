@@ -36,7 +36,7 @@ def sendEmail(Person1, Person2):
     SUBJECT = 'Mutual Crush Found!'
     MESSAGE = "Congratulations " + Person1.name + " and " + Person2.name + ", you both have a crush on each other!"
     EMAILS = [Person1.email, Person2.email]
-    FROM = "crush@mit.edu"
+    FROM = "mit-crush@mit.edu"
     send_mail(SUBJECT, MESSAGE, FROM, EMAILS, fail_silently=False)
 
 def sendEmailNoMatch(Person2):
@@ -51,7 +51,7 @@ Good luck,
 MIT Crush
 http://crush.mit.edu''' % Person2.name
     EMAILS = [Person2.email]
-    FROM = 'crush@mit.edu'
+    FROM = 'mit-crush@mit.edu'
     send_mail(SUBJECT, MESSAGE, FROM, EMAILS, fail_silently=False)
 
 def sendVerificationEmail(Person):
@@ -152,38 +152,34 @@ def submit(request):
 def emailDebug(message):
     SUBJECT = "MIT Crush Debug 5"
     EMAILS = ['blakeelias@gmail.com']
-    FROM = "crush@mit.edu"
+    FROM = "mit-crush@mit.edu"
     send_mail(SUBJECT, message, FROM, EMAILS, fail_silently=False)
     
 def index(request):
-    emailDebug('at index')
     return HttpResponseRedirect('https://crush.mit.edu:444/auth/')
 
 def auth(request):
-    emailDebug('at auth')
     if not 'REDIRECT_SSL_CLIENT_S_DN_Email' in request.META:
         return redirect('http://crush.mit.edu/need_certificate')
-    emailDebug('got certificate')
     person = Person.objects.get(
         email = request.META['REDIRECT_SSL_CLIENT_S_DN_Email'] 
     )
-    emailDebug('got email')
 
     request.session['email'] = person.email
     request.session['auth'] = True
-    emailDebug('saved session')
+
     return redirect('http://crush.mit.edu/form/')
 
 def form(request):
     print('at form')
     if 'auth' in request.session and 'email' in request.session:
-        emailDebug('retrieved session')
+
         form = RegisterForm()
         variables = RequestContext(request, {'form': form,})
-        emailDebug('rendering response')
+
         return render_to_response('crush_connector/connect.html', variables)
     else:
-        emailDebug('no certificate')
+
         return redirect('http://crush.mit.edu/need_certificate')
 
 def about(request):
