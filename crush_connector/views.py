@@ -150,6 +150,9 @@ def submit(request):
         return render_to_response('crush_connector/connect.html', variables)
 
 def index(request):
+    return redirect('https://crush.mit.edu:444/auth/')
+
+def auth(request):
     if not 'REDIRECT_SSL_CLIENT_S_DN_Email' in request.META:
         return redirect('http://crush.mit.edu/need_certificate')
     person = Person.objects.get(
@@ -158,7 +161,7 @@ def index(request):
 
     request.session['person'] = person
     request.session['auth'] = True
-    return redirect('/form/')
+    return redirect('http://crush.mit.edu/form/')
 
 def form(request):
     if request.session['auth']:
