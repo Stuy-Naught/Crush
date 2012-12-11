@@ -69,7 +69,7 @@ def submit(request):
         if not 'email' in request.session:
             return redirect('http://crush.mit.edu/need_certificate')
         person = Person.objects.get(
-            email = request.response['email'] 
+            email = request.session['email'] 
             )
         num_allowed = person.num_allowed_crushes
         if num_allowed < 0:
