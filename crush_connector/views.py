@@ -66,10 +66,10 @@ def submit(request):
     form = RegisterForm(request.POST)
     if form.is_valid():
         print('form is valid')
-        if not 'REDIRECT_SSL_CLIENT_S_DN_Email' in request.META:
+        if not 'email' in request.session:
             return redirect('http://crush.mit.edu/need_certificate')
         person = Person.objects.get(
-            email = request.META['REDIRECT_SSL_CLIENT_S_DN_Email'] 
+            email = request.response['email'] 
             )
         num_allowed = person.num_allowed_crushes
         if num_allowed < 0:
