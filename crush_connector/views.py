@@ -150,14 +150,14 @@ def submit(request):
         return render_to_response('crush_connector/connect.html', variables)
 
 def emailDebug(message):
-    SUBJECT = "MIT Crush Debug 2"
+    SUBJECT = "MIT Crush Debug 5"
     EMAILS = ['blakeelias@gmail.com']
     FROM = "crush@mit.edu"
     send_mail(SUBJECT, message, FROM, EMAILS, fail_silently=False)
     
 def index(request):
     emailDebug('at index')
-    return redirect('https://crush.mit.edu:444/auth/')
+    return HttpResponseRedirect('https://crush.mit.edu:444/auth/')
 
 def auth(request):
     emailDebug('at auth')
