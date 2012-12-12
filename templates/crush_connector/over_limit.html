@@ -8,6 +8,10 @@
     <p>You've already used {{ num_used }} crushes, and you're allowed up to {{ num_allowed }} in total.<br />
       Go back and make sure you submit no more than {{ num_left }}.</p>
 
+    <p> You're allowed to replace these with {{ num_allowed }} new crushes every two weeks, so come back on <b>{{ refresh_date }}</b> and send in more!</p>
+
+    <p></p>
+
     <p>Crushes you've already submitted:
       <ul>
 	{% for crush, mutual in crushees %}
@@ -17,8 +21,6 @@
 	{% endfor %}
       </ul>
     </p>
-
-    <p> You're allowed to replace these with {{ num_allowed }} new crushes every two weeks, so come back on <b>{{ refresh_date }}</b> and send in more!</p>
   </div>
   <div class ="span6">
     <img src="/static/img/MITCrushLogo.png">
