@@ -81,6 +81,13 @@ def submit(request):
             crush_email = form.cleaned_data['Crush_email_%d' % (i+1)]
             if crush_email != '':
                 num_submitted += 1
+                try:
+                    crush = Person.objects.get(email=crush_email)
+                except:
+                    variables = RequestContext(request, {
+                        'invalid': crush_email
+                        })
+                    return render_to_response('crush_connector/invalid.html', variables)
 
         num_left = num_allowed - person.num_crushes_used
 
@@ -147,7 +154,7 @@ def submit(request):
 
         return render_to_response('crush_connector/validate.html', variables)
     else:        
-        variables = RequestContext(request, {'form': form})
+        variables = RequestContext(request, {'form': form, 'hostname': HOSTNAME})
         return render_to_response('crush_connector/connect.html', variables)
 
 def emailDebug(message):
@@ -176,7 +183,7 @@ def form(request):
     if 'auth' in request.session and 'email' in request.session:
 
         form = RegisterForm()
-        variables = RequestContext(request, {'form': form,})
+        variables = RequestContext(request, {'form': form, 'hostname': HOSTNAME})
 
         return render_to_response('crush_connector/connect.html', variables)
     else:

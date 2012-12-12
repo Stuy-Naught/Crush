@@ -1,0 +1,20 @@
+{% extends "crush_connector/index.django" %}
+
+{% block content %}
+<div class="row">
+  <div class="span6">
+    <h1>Invalid email</h1>
+    <p>The following email address does not appear to be a valid MIT email address: <br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>{{ invalid }}</b></p>
+
+    <p>MIT Crush is only for students at MIT. Please enter email addresses (@mit.edu) for individuals who attend MIT or are cross-registered from other universities. Group mailing lists are not allowed.</p>
+  </div>
+  <div class ="span6">
+    <img src="/static/img/MITCrushLogo.png">
+  </div>
+</div>
+{% endblock %}
+
+{% block tips %}
+{% endblock %}
+
