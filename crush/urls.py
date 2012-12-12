@@ -29,5 +29,8 @@ urlpatterns = patterns('',
     url(r'^names/', 'crush_connector.views.getnames'),
     url(r'^need_certificate/', 'crush_connector.views.need_certificate'),
     url(r'^over_limit/', 'crush_connector.views.over_limit'),
+)
 
-                       )
+handler403 = 'crush_connector.error_views.custom_403'
+handler404 = 'crush_connector.error_views.custom_404'
+handler500 = 'crush_connector.error_views.custom_500'
