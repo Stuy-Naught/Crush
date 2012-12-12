@@ -23,7 +23,7 @@ class Crush(models.Model):
 
     num_allowed_crushes = 3 # number of crushes a person can enter on the form
     def __unicode__(self):
-        return "%s likes %s" % (self.crusher, self.crushee)
+        return "%d likes %d" % (self.crusher.pk, self.crushee.pk)
 
     def save(self, *args, **kwargs):
         '''On save, update timestamps'''
