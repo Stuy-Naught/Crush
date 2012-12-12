@@ -14,8 +14,9 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^preview/$', 'crush_connector.views.index'),
-    url(r'^$', 'crush_connector.views.splash'),
+#    url(r'^preview/$', 'crush_connector.views.index'),
+    url(r'^$', 'crush_connector.views.index'),
+                       # ^^^ change from views.index to 'crush_connector.views.splash' to hide the site
     url(r'^auth/', 'crush_connector.views.auth'),
     url(r'^ctest/', 'ctest.views.index'),
     url(r'^about/', 'crush_connector.views.about'),
