@@ -1,6 +1,6 @@
 # Django settings for crush project.
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -10,6 +10,7 @@ ADMINS = (
 MANAGERS = ADMINS
 
 from local_settings import DATABASES
+from local_settings import HOSTNAME, HOSTNAME_SSL
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name

@@ -6,6 +6,7 @@ from django.shortcuts import render_to_response, redirect
 from crush_connector.models import Person, Crush, RefreshDates, PersonBeenNotified
 from crush_connector.forms import RegisterForm
 from datetime import datetime, timedelta
+from crush.settings import HOSTNAME, HOSTNAME_SSL
 
 def isMatch(Person1, Person2):
     crushes = Crush.objects.filter(active=True)
@@ -67,7 +68,7 @@ def submit(request):
     if form.is_valid():
         print('form is valid')
         if not 'email' in request.session:
-            return redirect('http://crush.mit.edu/need_certificate')
+            return redirect('%s/need_certificate' % HOSTNAME)
         person = Person.objects.get(
             email = request.session['email'] 
             )
@@ -156,11 +157,11 @@ def emailDebug(message):
     send_mail(SUBJECT, message, FROM, EMAILS, fail_silently=False)
     
 def index(request):
-    return HttpResponseRedirect('https://crush.mit.edu:444/auth/')
+    return HttpResponseRedirect('%s/auth/' % HOSTNAME_SSL)
 
 def auth(request):
     if not 'REDIRECT_SSL_CLIENT_S_DN_Email' in request.META:
-        return redirect('http://crush.mit.edu/need_certificate')
+        return redirect('%s/need_certificate' % HOSTNAME)
     person = Person.objects.get(
         email = request.META['REDIRECT_SSL_CLIENT_S_DN_Email'] 
     )
@@ -168,7 +169,7 @@ def auth(request):
     request.session['email'] = person.email
     request.session['auth'] = True
 
-    return redirect('http://crush.mit.edu/form/')
+    return redirect('%s/form/' % HOSTNAME)
 
 def form(request):
     print('at form')
@@ -180,7 +181,7 @@ def form(request):
         return render_to_response('crush_connector/connect.html', variables)
     else:
 
-        return redirect('http://crush.mit.edu/need_certificate')
+        return redirect('%s/need_certificate' % HOSTNAME)
 
 def about(request):
     return render_to_response('crush_connector/about.html')
