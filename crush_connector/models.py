@@ -12,7 +12,7 @@ class Person(models.Model):
     num_allowed_crushes = models.IntegerField(default=-1) # default value -1 means fall back on the value of Crush.num_allowed_crushes
 
     def __unicode__(self):
-        return self.name
+        return str(self.pk)
 
 
 class Crush(models.Model):
