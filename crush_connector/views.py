@@ -41,16 +41,16 @@ def sendEmail(Person1, Person2):
     send_mail(SUBJECT, MESSAGE, FROM, EMAILS, fail_silently=False)
 
 def sendEmailNoMatch(Person2):
-    SUBJECT = 'An anonymous MIT student has a crush on you...'
+    SUBJECT = 'An  MIT student has a crush on you'
     MESSAGE = '''Dear %s,
 
-An anonymous MIT student has a crush on you! Go on http://crush.mit.edu, fill out a list of people you have a crush on, and see if there\'s a match!
+An anonymous MIT student has a crush on you. You can go to crush.mit.edu to find out whether or not this is a mutual crush.
 
 MIT Crush is a way to submit anonymous crushes on people. If a crush is mutual then both people who submitted the anonymous crush are informed that the other person feels the same way.
 
 Good luck,
 MIT Crush
-http://crush.mit.edu''' % Person2.name
+''' % Person2.name
     EMAILS = [Person2.email]
     FROM = 'mit-crush@mit.edu'
     send_mail(SUBJECT, MESSAGE, FROM, EMAILS, fail_silently=False)
