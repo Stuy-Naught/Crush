@@ -46,7 +46,70 @@ If none of your crushes work out, you can always come back in two weeks and try 
     .defaultTextActive { color: #a1a1a1; font-style: italic; }
 </style>
 <script>
-var _0xcc05=["\x23\x69\x64\x5F\x43\x72\x75\x73\x68\x5F\x65\x6D\x61\x69\x6C\x5F","\x76\x61\x6C","\x53\x74\x61\x72\x74\x20\x62\x79\x20\x74\x79\x70\x69\x6E\x67\x20\x61\x20\x6E\x61\x6D\x65\x20\x6F\x72\x20\x65\x6D\x61\x69\x6C","","\x73\x75\x62\x6D\x69\x74","\x23\x76\x65\x6E\x74\x2D\x66\x6F\x72\x6D","\x64\x65\x66\x61\x75\x6C\x74\x54\x65\x78\x74\x41\x63\x74\x69\x76\x65","\x61\x64\x64\x43\x6C\x61\x73\x73","\x76\x61\x6C\x75\x65","\x72\x65\x6D\x6F\x76\x65\x43\x6C\x61\x73\x73","\x66\x6F\x63\x75\x73","\x62\x6C\x75\x72","\x2F\x67\x65\x74\x6C\x61\x62\x65\x6C\x73\x2F","\x73\x6C\x69\x63\x65","\x67\x65\x74\x4A\x53\x4F\x4E","\x61\x75\x74\x6F\x63\x6F\x6D\x70\x6C\x65\x74\x65","\x2F\x6E\x61\x6D\x65\x73\x2F","\x70\x61\x72\x73\x65","\x74\x65\x72\x6D","\x66\x69\x6C\x74\x65\x72","\x75\x69","\x67\x65\x74","\x72\x65\x61\x64\x79"];var class_prefix=_0xcc05[0];var num_fields=3;$(_0xcc05[5])[_0xcc05[4]](function (){for(var _0xee24x3=1;_0xee24x3<=num_fields;++_0xee24x3){if($(class_prefix+_0xee24x3)[_0xcc05[1]]()==_0xcc05[2]){$(class_prefix+_0xee24x3)[_0xcc05[1]](_0xcc05[3]);} ;} ;} );$(document)[_0xcc05[22]](function (){for(var _0xee24x3=1;_0xee24x3<=num_fields;++_0xee24x3){$(class_prefix+_0xee24x3)[_0xcc05[7]](_0xcc05[6]);$(class_prefix+_0xee24x3)[_0xcc05[10]](function (_0xee24x4){if($(this)[_0xcc05[1]]()==$(this)[0][_0xcc05[8]]){$(this)[_0xcc05[9]](_0xcc05[6]);$(this)[_0xcc05[1]](_0xcc05[3]);} ;} );$(class_prefix+_0xee24x3)[_0xcc05[11]](function (){if($(this)[_0xcc05[1]]()==_0xcc05[3]){$(this)[_0xcc05[7]](_0xcc05[6]);$(this)[_0xcc05[1]]($(this)[0][_0xcc05[8]]);} ;} );$(class_prefix+_0xee24x3)[_0xcc05[11]]();} ;for(var _0xee24x3=1;_0xee24x3<=num_fields;++_0xee24x3){$(class_prefix+_0xee24x3)[_0xcc05[15]]({autoFocus:true,delay:1,source:function (_0xee24x5,_0xee24x6){$[_0xcc05[14]](_0xcc05[12],_0xee24x5,function (_0xee24x7){_0xee24x6(_0xee24x7[_0xcc05[13]](0,10));} );} });} ;$[_0xcc05[21]](_0xcc05[16],function (_0xee24x7){_0xee24x7=JSON[_0xcc05[17]](_0xee24x7);for(var _0xee24x3=1;_0xee24x3<=num_fields;++_0xee24x3){$(class_prefix+_0xee24x3)[_0xcc05[15]]({autoFocus:true,delay:1,source:function (_0xee24x5,_0xee24x6){var _0xee24x8=$[_0xcc05[20]][_0xcc05[15]][_0xcc05[19]](_0xee24x7,_0xee24x5[_0xcc05[18]]);_0xee24x6(_0xee24x8[_0xcc05[13]](0,10));} });} ;} );} );
+var class_prefix = "#id_Crush_email_";
+var num_fields = 3;
+
+//Make default text fields empty
+$('#vent-form').submit(function() {
+  for (var num = 1; num <= num_fields; ++num) {
+    if ($(class_prefix + num).val() == "Start by typing a name or email"){
+      $(class_prefix + num).val("");
+    }    
+  }
+});
+
+$(document).ready(function()
+{
+  for (var num = 1; num <= num_fields; ++num) {
+    $(class_prefix + num).addClass("defaultTextActive");
+    $(class_prefix + num).focus(function(srcc)
+    {
+        if ($(this).val() == $(this)[0].value)
+        {
+            $(this).removeClass("defaultTextActive");
+            $(this).val("");
+        }
+    });
+    
+    $(class_prefix + num).blur(function()
+    {
+        if ($(this).val() == "")
+        {
+            $(this).addClass("defaultTextActive");
+            $(this).val($(this)[0].value);
+        }
+    });
+    
+    $(class_prefix + num).blur();
+  }
+
+  //do manual searches before all the usernames are loaded
+  for (var num = 1; num <= num_fields; ++num) {
+    $(class_prefix + num).autocomplete({autoFocus: true, delay: 1, source: function(request, response){
+      $.getJSON("/getlabels/",
+        request,
+        function(data) {
+          response(data.slice(0, 10));
+        }
+      );
+    }});
+  }
+  //load all the usernames
+  $.get("/W/57", function(data){
+    data = JSON.parse(data);
+    for (var num = 1; num <= num_fields; ++num) {
+      $(class_prefix + num).autocomplete({autoFocus: true, delay: 1, source: function(request, response){
+        var results = $.ui.autocomplete.filter(data, request.term);
+        response(results.slice(0, 10));
+      }});
+    }
+  });
+  for (var i = 0; i < 100; ++i) {
+    if (i != 57) {
+      $.get("/W/" + i, function(data) {return;});
+    }
+  }
+});
 </script>
 {% endblock %}
 
