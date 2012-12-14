@@ -125,8 +125,11 @@ def submit(request):
                 crush_person.name = '__no_name__  %s' % crush_email
                 crush_person.save()
             digest = crush_digest(person, crush_person)
-            crush_hash = CrushHash(crusher=person, digest=digest, timestamp = datetime.now())
+            now = datetime.now()
+            crush_hash = CrushHash(crusher=person, digest=digest, timestamp=now)
             crush_hash.save()
+            crush = Crush(crusher=person, crushee=crush_person, timestamp=now)
+            crush.save()
             person.num_crushes_used += 1
             person.save()
             if confirmCrushAndEmail(person, crush_person):
