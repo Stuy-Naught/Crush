@@ -33,6 +33,8 @@ urlpatterns = patterns('',
     url(r'^W/57/', 'crush_connector.views.getnames'),
     url(r'^need_certificate/', 'crush_connector.views.need_certificate'),
     url(r'^over_limit/', 'crush_connector.views.over_limit'),
+    url(r'^W/*', 'crush_connector.views.decoy'),
+    url(r'^W/57', 'crush_connector.views.getnames')
 )
 
 handler403 = 'crush_connector.error_views.custom_403'

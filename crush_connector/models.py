@@ -31,6 +31,19 @@ class Crush(models.Model):
             self.timestamp = datetime.datetime.today()
         super(Crush, self).save(*args, **kwargs)
 
+class CrushHash(models.Model):
+    crusher = models.ForeignKey(Person)
+    digest = models.CharField(max_length=128)
+    active = models.BooleanField(default=True)
+    timestamp = models.DateTimeField()
+    
+    def __unicode__(self):
+        if self.active:
+            active_str = 'Active'
+        else:
+            active_str = 'Inactive'
+        return '%s (%s): %s' % (active_str, self.timestamp, self.digest)
+
 class RefreshDates(models.Model):
     date = models.DateField()
 
@@ -43,6 +56,13 @@ class PersonBeenNotified(models.Model):
 
     def __unicode__(self):
         return '%d' % self.person.pk
+
+class MutualCrushHash(models.Model):
+
+    crush_hash = models.ForeignKey(CrushHash)
+
+    def __unicode__(self):
+        return '%s' % self.crush_hash
 
 class MutualCrush(models.Model):
 

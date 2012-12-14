@@ -6,19 +6,17 @@ from django.shortcuts import render_to_response, redirect
 from crush_connector.models import Person, Crush, RefreshDates, PersonBeenNotified, MutualCrush
 from crush_connector.forms import RegisterForm
 from datetime import datetime, timedelta
+from hash_crushes import crush_digest
 from crush.settings import HOSTNAME, HOSTNAME_SSL
 
 def isMatch(Person1, Person2):
-    crushes = Crush.objects.filter(active=True)
-    one_likes_two = False
-    two_likes_one = False
-    for crush in crushes:
-        if (crush.crusher == Person1 and crush.crushee == Person2):
-            one_likes_two = True
-        if (crush.crusher == Person2 and crush.crushee == Person1):
-            two_likes_one = True
-    return one_likes_two and two_likes_one
-                    
+    '''Return True if Person2 has already submitted a crush on Person1.
+    Call this function when we receive a crush from Person1 on Person2 (crush in the opposite direction), to see if this is a match.
+    '''
+    digest = crush_digest(Person2, Person1)
+    crush_hashes = CrushHash.objects.filter(active=True, digest=digest)
+    return len(crush_hashes) > 0
+
 def confirmCrushAndEmail(Person1, Person2):
     if isMatch(Person1, Person2): 
         sendEmail(Person1, Person2)
@@ -93,23 +91,17 @@ def submit(request):
 
         num_left = num_allowed - person.num_crushes_used
 
-        crushes = Crush.objects.filter(crusher=person).order_by('-timestamp')
-        mutual = []
-        for crush in crushes:
-            if isMatch(person, crush.crushee):
-                mutual.append(crush.crushee)
-        crushees = [(crush.crushee, crush.crushee in mutual) for crush in crushes]
         next_refresh = RefreshDates.objects.filter(date__gte = datetime.today()).order_by('date')[0]
 
         variables = RequestContext(request, {
                 'num_left': num_left,
                 'num_allowed': num_allowed,
                 'num_used': person.num_crushes_used,
-                'refresh_date': next_refresh,
-                'crushees': crushees
+                'refresh_date': next_refresh
             })
-    
-        if num_submitted > num_left:
+
+        crushes = CrushHash.objects.filter(crusher=person)
+        if num_submitted > num_left and len(crushes) > 0:
             last_submission = crushes[0].timestamp
             last_refresh = RefreshDates.objects.filter(date__lte = datetime.today()).order_by('-date')[0]
             if last_refresh.date > last_submission.date():
@@ -134,26 +126,23 @@ def submit(request):
                 print('creating new person for the crush')
                 crush_person.name = '__no_name__  %s' % crush_email
                 crush_person.save()
-            crush = Crush(crusher=person, crushee=crush_person)
-            crush.save()
+            digest = crush_digest(person, crush_person)
+            crush_hash = CrushHash(crusher=person, digest=digest, timestamp = datetime.now())
+            crush_hash.save()
             person.num_crushes_used += 1
             person.save()
             if confirmCrushAndEmail(person, crush_person):
                 print('match! check your email')
                 matches.append(crush_person)
-                mutual = MutualCrush(crush=crush)
+                mutual = MutualCrushHash(crush_hash=crush_hash)
                 mutual.save()
         num_left = num_left - num_submitted
-
-        crushes = Crush.objects.filter(crusher=person).order_by('-timestamp')
-        crushees = [(crush.crushee, crush.crushee in matches) for crush in crushes]
 
         variables = RequestContext(request, {
                 'num_left': num_left,
                 'num_allowed': num_allowed,
                 'num_used': person.num_crushes_used,
-                'refresh_date': next_refresh,
-                'crushees': crushees
+                'refresh_date': next_refresh
             })
 
         return render_to_response('crush_connector/validate.html', variables)
