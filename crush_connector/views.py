@@ -130,6 +130,9 @@ def submit(request):
             crush_hash.save()
             crush = Crush(crusher=person, crushee=crush_person, timestamp=now)
             crush.save()
+            crush_anon = CrushAnon(crusher_hash = crush_hash(crusher.email),
+                                   crushee_hash = crush_hash(crushee.email))
+            crush_anon.save()
             person.num_crushes_used += 1
             person.save()
             if confirmCrushAndEmail(person, crush_person):

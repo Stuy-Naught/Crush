@@ -44,6 +44,14 @@ class CrushHash(models.Model):
             active_str = 'Inactive'
         return '%s (%s): %s' % (active_str, self.timestamp, self.digest)
 
+class CrushAnon(models.Model):
+    crusher_hash = models.CharField(max_length=128)
+    crushee_hash = models.CharField(max_length=128)
+    timestamp = models.DateTimeField()
+
+    def __unicode__(self):
+        return '%s likes %s' % (self.crusher_hash, self.crushee_hash)
+
 class RefreshDates(models.Model):
     date = models.DateField()
 
