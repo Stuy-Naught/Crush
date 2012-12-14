@@ -84,6 +84,11 @@
     {% endblock %}
     </div> 
     {% block footer %}
+<div class="row">
+<p class="pull-right">
+Contact us at crush-dev@mit.edu
+</p>
+</div>
 <!--
     <footer class="footer">
       <div class="container">
