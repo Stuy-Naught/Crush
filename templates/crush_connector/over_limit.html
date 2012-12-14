@@ -10,17 +10,6 @@
 
     <p> You're allowed to replace these with {{ num_allowed }} new crushes every two weeks, so come back on <b>{{ refresh_date }}</b> and send in more!</p>
 
-    <p>&nbsp;</p>
-
-    <p>Crushes you've already submitted:
-      <ul>
-	{% for crush, mutual in crushees %}
-	<li>{{ crush.name }} - {{ crush.email }}
-	  {% if mutual %} (mutual!) {% endif %}
-	</li>
-	{% endfor %}
-      </ul>
-    </p>
   </div>
   <div class ="span6">
     <img src="/static/img/MITCrushLogo.png">
