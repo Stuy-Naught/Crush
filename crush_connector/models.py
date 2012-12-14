@@ -42,4 +42,19 @@ class PersonBeenNotified(models.Model):
     person = models.ForeignKey(Person)
 
     def __unicode__(self):
-        return '%s - %s' % (self.person.name, self.person.email)
+        return '%d' % self.person.pk
+
+class MutualCrush(models.Model):
+
+    crush = models.ForeignKey(Crush)
+
+    def __unicode__(self):
+        return '%s' % self.crush
+
+    def save(self, *args, **kwargs):
+        '''Save this mutual crush, but only if we haven\'t already made a match between these two people.'''
+        for mutual in MutualCrush.objects.all():
+            if (mutual.crush.crusher == self.crush.crusher and mutual.crush.crushee == self.crush.crushee) \
+               or (mutual.crush.crusher == self.crush.crusher and mutual.crush.crushee == self.crush.crushee):
+                return
+        super(MutualCrush, self).save(*args, **kwargs)

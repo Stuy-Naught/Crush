@@ -3,7 +3,7 @@ from django.core.mail import send_mail
 from django.template import Context, RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, redirect
-from crush_connector.models import Person, Crush, RefreshDates, PersonBeenNotified
+from crush_connector.models import Person, Crush, RefreshDates, PersonBeenNotified, MutualCrush
 from crush_connector.forms import RegisterForm
 from datetime import datetime, timedelta
 from crush.settings import HOSTNAME, HOSTNAME_SSL
@@ -141,6 +141,8 @@ def submit(request):
             if confirmCrushAndEmail(person, crush_person):
                 print('match! check your email')
                 matches.append(crush_person)
+                mutual = MutualCrush(crush=crush)
+                mutual.save()
         num_left = num_left - num_submitted
 
         crushes = Crush.objects.filter(crusher=person).order_by('-timestamp')
@@ -254,3 +256,6 @@ def over_limit(request):
 
 def splash(request):
     return render_to_response('crush_connector/launching_soon.html')
+
+def decoy(request):
+    return HttpResponse('0x8739ae05')
