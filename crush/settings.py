@@ -149,3 +149,4 @@ LOGGING = {
     }
 }
 
+ALLOWED_HOSTS = ['crush.mit.edu']
