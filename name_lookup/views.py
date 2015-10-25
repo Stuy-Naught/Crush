@@ -98,7 +98,7 @@ def create_autocomplete_file():
     autocompleteList = []
     for person in Person.objects.all():
         autocompleteList.append({'label': '%s - %s' % (person.name, person.email), 'value': person.email})
-    autocompleteFile = fopen('/afs/athena.mit.edu/user/w/h/whaack/Scripts/django/crush/templates/crush_connector/names.json', w)
+    autocompleteFile = file('/afs/athena.mit.edu/user/w/h/whaack/Scripts/django/crush/templates/crush_connector/names.json', 'w')
     autocompleteFile.empty()
     autocompleteFile.write(str(autocompleteList))
 
