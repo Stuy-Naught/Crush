@@ -46,6 +46,8 @@ An anonymous MIT student has a crush on you. You can go to crush.mit.edu to find
 
 MIT Crush is a way to submit anonymous crushes on people. If a crush is mutual then both people who submitted the anonymous crush are informed that the other person feels the same way.
 
+If more people put you as a crush, you will not receive this email again. You will only receive another email if you get matched with a mutual crush.
+
 Good luck,
 MIT Crush
 ''' % Person2.name
