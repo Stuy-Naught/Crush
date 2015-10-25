@@ -101,7 +101,7 @@ def create_autocomplete_file():
     autocompleteFile = file('/afs/athena.mit.edu/user/w/h/whaack/Scripts/django/crush/templates/crush_connector/names.json', 'w')
     #autocompleteFile.write(str(autocompleteList))
     for item in autocompleteList:
-        autocompleteFile.write(str("{'label': %s, 'value': %s},\n" % (str(item.label), str(item.value))))
+        autocompleteFile.write(str("{'label': %s, 'value': %s},\n" % (str(item['label']), str(item['value']))))
     autocompleteFile.close()
 
 def name_lookup_and_populate():
