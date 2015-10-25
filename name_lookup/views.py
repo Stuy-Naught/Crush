@@ -93,3 +93,19 @@ def populate_names(request):
     #        for athena_name in ls('%s/%s/%s' % (base_dir, first_letter, second_letter)):
     #            set_user_info(athena_name)
                 
+
+def create_autocomplete_file():
+    autocompleteList = []
+    for person in Person.objects.all():
+        autocompleteList.append({'label': '%s - %s' % (person.name, person.email), 'value': person.email})
+    autocompleteFile = fopen('/afs/athena.mit.edu/user/w/h/whaack/Scripts/django/crush/templates/crush_connector/names.json', w)
+    autocompleteFile.empty()
+    autocompleteFile.write(str(autocompleteList))
+
+def name_lookup_and_populate():
+    '''This should be the full process for importing names into the database. 
+    Looks up all existing user names, gets their info, and puts them into the database.'''
+    subprocess.check_output('./name-list.sh > name_list.txt')
+    subprocess.check_output('./name-info.sh')
+    populate_names({})
+    create_autocomplete_file()
